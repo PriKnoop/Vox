@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.tcc.apptcc" >
+    package="com.tcc.apptcc.activities" >
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.SET_DEBUG_APP" />
 
     <application
         android:allowBackup="true"
@@ -8,21 +12,31 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".activities.MainActivity"
+            android:name="com.tcc.apptcc.activities.SplashActivity"
             android:label="@string/app_name" >
             <intent-filter>
+
+
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.SearchActivity"
-            android:label="@string/title_activity_search" >
+            android:name=".LoginActivity"
+            android:label="@string/title_activity_login" >
         </activity>
         <activity
-            android:name=".activities.LoginActivity"
-            android:label="@string/title_activity_login" >
+            android:name=".HomeActivity"
+            android:label="@string/title_activity_home" >
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main" >
+        </activity>
+        <activity
+            android:name=".CadastroActivity"
+            android:label="@string/title_activity_cadastro" >
         </activity>
     </application>
 

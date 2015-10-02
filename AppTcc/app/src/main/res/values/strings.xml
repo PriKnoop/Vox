@@ -1,8 +1,31 @@
 <resources>
-    <string name="app_name">AppTcc</string>
+    <string name="app_name">Vox App</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_search">SearchActivity</string>
-    <string name="title_activity_login">LoginActivity</string>
+    <string name="action_settings">Configurações</string>
+    <string name="title_activity_search">Pesquisa</string>
+    <string name="title_activity_login">Login</string>
+    <string name="Login">login</string>
+    <string name="title_activity_home">Vox</string>
+
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_example">Example action</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_main">Principal</string>
+    <string name="title_activity_cadastro">Cadastro</string>
+    <string name="str_cadastro">Cadastre-se</string>
+    <string name="str_cadastre">Cadastre-se</string>
+    <string name="str_login">Login</string>
+    <string name="str_welcome">bem vindo ao</string>
+    <string name="str_senha">Senha</string>
+    <string name="title_activity_usuario_logado">UsuarioLogadoActivity</string>
+    <string name="action_logout">Logout</string>
 </resources>

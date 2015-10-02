@@ -1,8 +1,12 @@
 package br.com.ws.managers;
 
+import java.lang.reflect.ParameterizedType;
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 
 /**
  * @author Priscila
@@ -26,7 +30,7 @@ public class SimpleEntityManager {
 		this.entityManager = factory.createEntityManager();
 	}
 
-	public void beginTransaction() {
+	public void begin() {
 		entityManager.getTransaction().begin();
 	}
 
@@ -47,7 +51,36 @@ public class SimpleEntityManager {
 		entityManager.getTransaction().rollback();
 	}
 
-	public EntityManager getEntityManager() {
-		return entityManager;
-	}
+	public <T> T persist(T object) {
+    	entityManager.persist(object);
+        return object;
+    }
+ 
+    public <T> T merge(T object) {
+        entityManager.merge(object);
+        return object;
+    }
+ 
+    public <T> void remove(T object) {
+        entityManager.remove(object);
+    }
+    
+    public <T> T findById(Class<T> type, Long id) {
+
+		T object =  entityManager.find(type, id);
+        return object;
+    }
+ 
+	@SuppressWarnings("unchecked")
+	public <T> List<T> FindAll() {
+        Query consulta =  entityManager.createQuery("select * from " + getTypeClass().getName());
+		return consulta.getResultList();
+                
+    }
+ 
+    private Class<?> getTypeClass() {
+        Class<?> clazz = (Class<?>) ((ParameterizedType) this.getClass()
+                .getGenericSuperclass()).getActualTypeArguments()[1];
+        return clazz;
+    }
 }

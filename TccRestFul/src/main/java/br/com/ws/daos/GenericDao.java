@@ -29,11 +29,11 @@ public class GenericDao<PK, T> {
         System.out.println("Deletando " + getTypeClass().getName());
     }
     
-    public Object findById(PK pk) {
+    public T encontrarPorId(Class<T> type, Long id) {
 
-		Object find =  entityManager.find(getTypeClass(), pk);
+		T object =  entityManager.find(type, id);
         System.out.println("Encontrando " + getTypeClass().getName());
-        return find;
+        return object;
     }
  
 	public List<T> findAll() {
@@ -41,7 +41,7 @@ public class GenericDao<PK, T> {
                 .getResultList();
     }
  
-    private Class<?> getTypeClass() {
+    protected Class<?> getTypeClass() {
         Class<?> clazz = (Class<?>) ((ParameterizedType) this.getClass()
                 .getGenericSuperclass()).getActualTypeArguments()[1];
         return clazz;
