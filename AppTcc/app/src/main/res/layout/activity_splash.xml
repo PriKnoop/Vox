@@ -9,15 +9,25 @@
     android:id="@+id/rl_main">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         android:id="@+id/iv_logo"
-        android:src="@drawable/marca_v_c"
+        android:src="@drawable/logo_semfundo"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="70dp"
-        android:clickable="false" />
+        android:clickable="false"
+        android:layout_marginTop="70dp"
+        android:layout_marginBottom="70dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+     <ImageView
+         android:layout_width="100dp"
+         android:layout_height="50dp"
+         android:id="@+id/iv_app"
+         android:background="@drawable/app_nome"
+         android:layout_alignParentBottom="true"
+         android:layout_centerHorizontal="true" />
 
 
-</RelativeLayout>
+ </RelativeLayout>
 

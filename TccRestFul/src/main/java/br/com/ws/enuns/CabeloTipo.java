@@ -1,5 +1,18 @@
 package br.com.ws.enuns;
 
 public enum CabeloTipo {
-	LISOS, ONDULADOS, CACHEADOS, CRESPOS, OUTRO
+	LISOS("Lisos"), ONDULADOS("Ondulados"), CACHEADOS("Cacheados"), CRESPOS(
+			"Crespos"), OUTRO("Outro");
+
+	public String descricao;
+
+	private CabeloTipo(String descricao) {
+		this.descricao = descricao;
+	}
+
+	@Override
+	public String toString() {
+		return this.descricao;
+	}
+
 }

@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -24,7 +25,7 @@ public class CadastroActivity extends AppCompatActivity {
     EditText etLoginCadastro;
     EditText etSenhaCadastro;
     EditText etSenhaRepetida;
-    ImageButton btCadastrar;
+    Button btCadastrar;
     UsuarioDAO usuarioDAO;
 
     String loginDigitado;
@@ -38,10 +39,6 @@ public class CadastroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro);
         inicializaComponentes();
-
-        if (verificaSeUsuarioJaLogou()) {
-            startActivity(new Intent(this, HomeActivity.class));
-        }
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -64,7 +61,12 @@ public class CadastroActivity extends AppCompatActivity {
                         etSenhaRepetida.setError("Insira sua senha novamente!");
                     }
                 } else {
+                    Boolean loginDisponivel = usuarioDAO.chamaMetodoVerificarLogin(loginDigitado);
                     System.out.println("Senhas: >>" +senhaRepetidaDigitada + senhaDigitada);
+                    if (loginDisponivel == false){
+                        etLoginCadastro.setError("Login indisponível");
+
+                    } else
                     if (!senhaRepetidaDigitada.equals(senhaDigitada)) {
                         etSenhaRepetida.setError("As senhas não coincidem!");
                     } else {
@@ -83,7 +85,7 @@ public class CadastroActivity extends AppCompatActivity {
         etLoginCadastro = (EditText) findViewById(R.id.et_login_cadastro);
         etSenhaCadastro = (EditText) findViewById(R.id.et_senha_cadastro);
         etSenhaRepetida = (EditText) findViewById(R.id.et_senha_repetida);
-        btCadastrar = (ImageButton) findViewById(R.id.ib_cadastrar);
+        btCadastrar = (Button) findViewById(R.id.ib_cadastrar);
         usuarioDAO = new UsuarioDAO();
     }
 

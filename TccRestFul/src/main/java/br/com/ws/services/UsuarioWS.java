@@ -10,31 +10,27 @@ import javax.ws.rs.Produces;
 
 import org.json.JSONObject;
 
-import pojos.Usuario;
 import br.com.ws.configs.JSON;
 import br.com.ws.daos.UsuarioDao;
 import br.com.ws.managers.WSTemplate;
+import br.com.ws.pojos.Usuario;
 
 @Path("usuario")
 public class UsuarioWS extends WSTemplate {
 
 	private EntityManager manager = factory.createEntityManager();
 
-	@GET
-	@Path("/adicionar/{login}/{senha}")
+	@POST
+	@Path("")
 	@Produces(JSON.UTF8JSON)
 	@Consumes(JSON.UTF8JSON)
-	public Usuario adicionarUsuario(@PathParam("login") String login, @PathParam("senha") String senha) {
-
+	public Usuario adicionarUsuario(Usuario usuario) {
 		try {
-			Usuario usuario = new Usuario();
-			usuario.setLogin(login);
-			usuario.setSenha(senha);
 			System.out.println("Entrei em adicionar usuario");
 			Usuario usuarioInserido = insert(usuario);
 			if (usuarioInserido != null) {
 				System.out.println("-----> Usuário adicionado!");
-				return usuario;
+				return usuarioInserido;
 			}
 		} catch (Exception e) {
 			System.out.println("Erro no adicionarUsuario, usuarioWS");
@@ -45,7 +41,7 @@ public class UsuarioWS extends WSTemplate {
 	}
 
 	@GET
-	@Path("/pesquisar/{id}")
+	@Path("/{id}")
 	@Produces(JSON.UTF8JSON)
 	public Usuario pesquisarUsuarioPorId(@PathParam("id") Long id) {
 		JSONObject json = null;
@@ -77,7 +73,7 @@ public class UsuarioWS extends WSTemplate {
 	@GET
 	@Path("/autenticarLoginSenha/{login}/{senha}")
 	@Produces(JSON.UTF8JSON)
-	public Usuario autenticarUsuario(@PathParam("login") String login,
+	public Usuario autenticarLoginSenha(@PathParam("login") String login,
 			@PathParam("senha") String senha) {
 		JSONObject json = null;
 		EntityManager manager = factory.createEntityManager();
@@ -143,20 +139,26 @@ public class UsuarioWS extends WSTemplate {
 		}
 		return usuario;
 	}
-
 	/*
-	 * @POST
+	 * @GET
 	 * 
-	 * @Path("/{usuario}") //@Produces(MediaType.TEXT_PLAIN + ";charset=utf-8")
+	 * @Path("/adicionar/{login}/{senha}")
 	 * 
-	 * @Produces({"application/json"}) public String
-	 * cadastrarUsuario(@PathParam("usuario") Usuario usuario) { //Usuario
-	 * retorno = usuarioDAO.adicionar(usuario); String retornoString =
-	 * "<echo>Web Service diz: Olá " + usuario.getIdUsuario() + "!</echo>";
-	 * JsonObject usuarioJSON = Json.createObjectBuilder() .add("idUsuario",
-	 * usuario.getIdUsuario()) .add("login", usuario.getLogin()) .add("nome",
-	 * usuario.getNome()) .add("senha", usuario.getSenha()) .add("fotoPessoal",
-	 * usuario.getFotoPessoal()) .build(); return retornoString; }
+	 * @Produces(JSON.UTF8JSON)
+	 * 
+	 * @Consumes(JSON.UTF8JSON) public Usuario
+	 * adicionarUsuario(@PathParam("login") String login, @PathParam("senha")
+	 * String senha) {
+	 * 
+	 * try { Usuario usuario = new Usuario(); usuario.setLogin(login);
+	 * usuario.setSenha(senha);
+	 * System.out.println("Entrei em adicionar usuario"); Usuario
+	 * usuarioInserido = insert(usuario); if (usuarioInserido != null) {
+	 * System.out.println("-----> Usuário adicionado!"); return usuario; } }
+	 * catch (Exception e) {
+	 * System.out.println("Erro no adicionarUsuario, usuarioWS");
+	 * System.out.println("-----> Usuário não adicionado!");
+	 * e.printStackTrace(); } return null; }
 	 */
 
 }

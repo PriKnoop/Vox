@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -28,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText etLogin;
     private EditText etSenha;
-    private ImageButton btLogin;
+    private Button btLogin;
     private UsuarioDAO usuarioDAO;
 //    private Usuario usuario;
     private String loginDigitado;
@@ -99,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
 
         etLogin = (EditText) findViewById(R.id.et_login_cadastro);
         etSenha = (EditText) findViewById(R.id.et_senha_cadastro);
-        btLogin = (ImageButton) findViewById(R.id.ib_login);
+        btLogin = (Button) findViewById(R.id.ib_login);
         usuarioDAO = new UsuarioDAO();
 
     }

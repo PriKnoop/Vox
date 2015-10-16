@@ -32,7 +32,7 @@ public class HomeActivity extends AppCompatActivity implements InsertFragment.On
         setContentView(R.layout.activity_home);// Creating The Toolbar and setting it as the Toolbar for the activity
 
         if (!verificaSeUsuarioJaLogou()) {
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, LoginActivity.class));
         }
 
             toolbar = (Toolbar) findViewById(R.id.tool_bar);
@@ -89,7 +89,7 @@ public class HomeActivity extends AppCompatActivity implements InsertFragment.On
                 SharedPreferences.Editor editarPreferencias = spPreferencias.edit();
                 editarPreferencias.clear();
                 editarPreferencias.commit();
-                Intent itPrimeiraTela = new Intent(HomeActivity.this, MainActivity.class);
+                Intent itPrimeiraTela = new Intent(HomeActivity.this, LoginActivity.class);
                 startActivity(itPrimeiraTela);
                 return true;
             }

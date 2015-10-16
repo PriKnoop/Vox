@@ -2,13 +2,12 @@ package br.com.ws.daos;
 
 import java.util.List;
 
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
-import pojos.Usuario;
+import br.com.ws.pojos.Usuario;
 
 public class UsuarioDao extends GenericDao<Long, Usuario> {
 
@@ -40,7 +39,8 @@ public class UsuarioDao extends GenericDao<Long, Usuario> {
 		return null;
 	}
 
-	public Usuario autenticarLoginSenha(String login, String senha, EntityManager em) {
+	public Usuario autenticarLoginSenha(String login, String senha,
+			EntityManager em) {
 		try {
 			Query consulta = em
 					.createQuery("Select u from Usuario as u where u.login like :login AND u.senha like :senha");

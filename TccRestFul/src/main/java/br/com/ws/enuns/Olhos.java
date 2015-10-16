@@ -1,5 +1,18 @@
 package br.com.ws.enuns;
 
 public enum Olhos {
-	CASTANHOS, AZUIS, VERDES, CINZAS, AVELÃS, AMBAR, VIOLETAS, OUTRA
+	CASTANHOS("Castanhos"), AZUIS("Azuis"), VERDES("Verdes"), CINZAS("Cinzas"), AVELAS(
+			"Avelãs"), AMBAR("Ambar"), VIOLETAS("Violetas"), OUTRA("Outra");
+
+	public String descricao;
+
+	private Olhos(String descricao) {
+		this.descricao = descricao;
+	}
+
+	@Override
+	public String toString() {
+		return this.descricao;
+	}
+
 }
