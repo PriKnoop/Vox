@@ -16,7 +16,7 @@ exclude 'META-INF/LICENSE'
 
     defaultConfig {
         applicationId "com.tcc.apptcc"
-        minSdkVersion 14
+        minSdkVersion 11
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -53,6 +53,7 @@ dependencies{
     compile('com.mikepenz:materialdrawer:4.3.6@aar') {
         transitive = true
     }
+
 
 
 }

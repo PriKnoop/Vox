@@ -26,7 +26,6 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
 
         spPreferencias = getApplicationContext().getSharedPreferences(NOME_PREFERENCIA, MODE_APPEND);
         editarPreferencias = spPreferencias.edit();
-        imageView1.setImageResource(R.drawable.marca_v_c);
 
         Handler handler = new Handler();
         handler.postDelayed(this, 3000);
@@ -34,8 +33,8 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
 
     private boolean verificaSeUsuarioJaLogou() {
         boolean logou = false;
-        String strLogin = spPreferencias.getString("login", null);
-        if (strLogin != null) {
+        Long preferencesId = spPreferencias.getLong("id", 0);
+        if (preferencesId != null) {
             logou = true;
         }
         return logou;

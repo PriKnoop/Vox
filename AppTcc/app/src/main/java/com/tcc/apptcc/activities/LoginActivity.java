@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tcc.apptcc.*;
@@ -30,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etLogin;
     private EditText etSenha;
     private Button btLogin;
+    private TextView tvCadastro;
     private UsuarioDAO usuarioDAO;
 //    private Usuario usuario;
     private String loginDigitado;
@@ -51,6 +53,14 @@ public class LoginActivity extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
 
         etLogin.setTypeface(EasyFonts.robotoRegular(this));
+
+        this.tvCadastro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent itTelaCadastro = new Intent(LoginActivity.this, CadastroActivity.class);
+                startActivity(itTelaCadastro);
+            }
+        });
 
         this.btLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,6 +112,7 @@ public class LoginActivity extends AppCompatActivity {
         etSenha = (EditText) findViewById(R.id.et_senha_cadastro);
         btLogin = (Button) findViewById(R.id.ib_login);
         usuarioDAO = new UsuarioDAO();
+        tvCadastro = (TextView) findViewById(R.id.tv_cadastro);
 
     }
 
@@ -125,7 +136,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 SharedPreferences preferences = getApplicationContext().getSharedPreferences(SplashActivity.NOME_PREFERENCIA, 0);
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putString("login", usuario.getLogin());
+                editor.putLong("id", usuario.getIdUsuario());
                 editor.commit();
 
                 Toast.makeText(LoginActivity.this, "Usuário autenticado!", Toast.LENGTH_LONG).show();
@@ -146,8 +157,8 @@ public class LoginActivity extends AppCompatActivity {
     private boolean verificaSeUsuarioJaLogou() {
         SharedPreferences spPreferencias = getApplicationContext().getSharedPreferences(NOME_PREFERENCIA, MODE_APPEND);
         boolean logou = false;
-        String strLogin = spPreferencias.getString("login", null);
-        if (strLogin != null) {
+        Long preferencesId = spPreferencias.getLong("id", 0);
+        if (preferencesId != 0) {
             logou = true;
         }
         return logou;

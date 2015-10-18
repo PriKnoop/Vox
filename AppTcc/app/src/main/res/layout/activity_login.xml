@@ -16,14 +16,11 @@
 
 
 <ImageView
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="200dp"
         android:id="@+id/iv_logo_login"
-        android:background="@drawable/fundo_pequeno"
-        android:src="@drawable/logo_semfundo"
-    android:layout_alignParentTop="true"
-    android:layout_alignParentLeft="true"
-    android:layout_alignParentStart="true" />
+    android:src="@mipmap/ic_launcher"
+    android:layout_centerHorizontal="true" />
 
 
 
@@ -39,27 +36,8 @@
         android:background="#ff5722"
 
         android:layout_below="@+id/et_senha_cadastro"
-        android:layout_alignLeft="@+id/et_senha_cadastro"
-        android:layout_alignStart="@+id/et_senha_cadastro"
-        android:layout_alignRight="@+id/et_senha_cadastro"
-        android:layout_alignEnd="@+id/et_senha_cadastro" />
-
-    <Button
-        style="@style/AppTheme"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="  Entrar pelo facebook  "
-        android:id="@+id/btn_facebook"
-        android:textColor="#fafafa"
-        android:enabled="false"
-        android:focusable="false"
-        android:background="#01688f"
-        android:layout_below="@+id/ib_login"
-        android:layout_alignLeft="@+id/ib_login"
-        android:layout_alignStart="@+id/ib_login"
-        android:layout_marginTop="46dp"
-        android:layout_alignRight="@+id/ib_login"
-        android:layout_alignEnd="@+id/ib_login" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="36dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -69,7 +47,8 @@
         android:clickable="true"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="35dp"
+        android:textColor="#0097A7" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -103,10 +82,20 @@
         android:paddingTop="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:layout_centerVertical="true"
-        android:layout_alignLeft="@+id/et_senha_cadastro"
-        android:layout_alignStart="@+id/et_senha_cadastro"
         android:layout_alignRight="@+id/et_senha_cadastro"
-        android:layout_alignEnd="@+id/et_senha_cadastro" />
+        android:layout_alignEnd="@+id/et_senha_cadastro"
+        android:layout_alignLeft="@+id/et_senha_cadastro"
+        android:layout_alignStart="@+id/et_senha_cadastro" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Bem vindo ao Vox!"
+        android:id="@+id/tv_hello"
+        android:layout_below="@+id/iv_logo_login"
+        android:layout_centerHorizontal="true"
+        android:textColor="#0097A7" />
 
 
     <!--    <android.support.v7.widget.CardView

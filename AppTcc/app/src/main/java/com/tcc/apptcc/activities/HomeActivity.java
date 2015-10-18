@@ -107,8 +107,8 @@ public class HomeActivity extends AppCompatActivity implements InsertFragment.On
     private boolean verificaSeUsuarioJaLogou() {
         SharedPreferences spPreferencias = getApplicationContext().getSharedPreferences(NOME_PREFERENCIA, MODE_APPEND);
         boolean logou = false;
-        String strLogin = spPreferencias.getString("login", null);
-        if (strLogin != null) {
+        Long preferencesId = spPreferencias.getLong("id", 0);
+        if (preferencesId != 0) {
             logou = true;
         }
         return logou;
