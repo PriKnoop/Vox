@@ -67,18 +67,6 @@ public class PessoaProcurada implements Serializable {
 	@JoinColumn(name = "ID_usuario")
 	private Usuario usuario;
 
-	// @OneToMany(mappedBy = "pessoaProcurada")
-	// private List<InfoContato> infoContato;
-
-	// @OneToMany(mappedBy = "pessoaProcurada")
-	// @ManyToOne(fetch = FetchType.LAZY)
-	// @Cascade(CascadeType.PERSIST)
-	// private List<Foto> foto;
-
-	// @OneToMany(mappedBy = "pessoaProcurada")
-	// @Cascade(CascadeType.PERSIST)
-	// private List<Avistamento> avistamento;
-
 	public PessoaProcurada() {
 	}
 
@@ -208,22 +196,4 @@ public class PessoaProcurada implements Serializable {
 	public void setAltura(double altura) {
 		this.altura = altura;
 	}
-
-	/*
-	 * @XmlElement
-	 * 
-	 * @XmlElementWrapper public List<InfoContato> getInfoContato() { return
-	 * infoContato; }
-	 * 
-	 * public void setInfoContato(List<InfoContato> infoContato) {
-	 * this.infoContato = infoContato; }
-	 */
-
-	/*
-	 * @XmlElement
-	 * 
-	 * @XmlElementWrapper public List<Foto> getFoto() { return foto; }
-	 * 
-	 * public void setFoto(List<Foto> foto) { this.foto = foto; }
-	 */
 }

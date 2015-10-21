@@ -1,10 +1,17 @@
 package com.tcc.apptcc.daos;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.tcc.apptcc.pojos.*;
 import com.tcc.apptcc.adapters.*;
 
 import org.json.JSONObject;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
@@ -29,25 +36,35 @@ public class UsuarioDAO {
 
     private static final String URL_PADRAO = ip +":8080/WSRest/rest/usuario";
 
-    public Usuario chamaMetodoAdicionarUsuario(String... params) {
+    public Usuario chamaMetodoAdicionarUsuario(Usuario usuario) {
 
         String URL = URL_PADRAO + "";
 
         try {
-            if (params != null){
-                Usuario usuario = new Usuario();
-                usuario.setLogin(params[0].toString());//login
-                usuario.setSenha(params[1].toString());//senha
+            if (usuario.getLogin() != null){
 
+                //usuario.setFotoPessoalEncoded(null);
                 Gson gson = new Gson();
                 String json = gson.toJson(usuario);
+                Log.i("DEBUG", json.toString());
 
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
                 restTemplate.setRequestFactory(
                         new HttpComponentsClientHttpRequestFactory());
 
-                Usuario usuarioRetornado = restTemplate.postForObject(URL, json, Usuario.class, json);
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_JSON );
+
+                HttpEntity<Usuario> request= new HttpEntity(json, headers);
+
+                //Mudar retorno pra JSON
+               // Usuario usuarioRetornado = restTemplate.postForObject(URL, request, Usuario.class );
+                Usuario usuarioRetornado = restTemplate.postForObject(URL, usuario, Usuario.class );
+
+
+                //ResponseEntity<Usuario> responseEntity = restTemplate.exchange(URL, HttpMethod.POST, request, Usuario.class);
+                //Usuario usuarioRetornado = restTemplate.postForObject(URL,json, Usuario.class);
                 return usuarioRetornado;
             }
 
@@ -59,7 +76,7 @@ public class UsuarioDAO {
     }
 
     public Usuario chamaMetodoPesquisarUsuarioPorId(Long id){
-        String URL = URL_PADRAO + id;
+        String URL = URL_PADRAO + "/"+id;
         Gson gson = new Gson();
         String response = Json.get(URL).toString();
         Usuario usuario = gson.fromJson(response, Usuario.class);

@@ -19,7 +19,7 @@
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:id="@+id/iv_logo_login"
-    android:src="@mipmap/ic_launcher"
+    android:src="@drawable/logo"
     android:layout_centerHorizontal="true" />
 
 

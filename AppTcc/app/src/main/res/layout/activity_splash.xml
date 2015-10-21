@@ -12,18 +12,24 @@
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:id="@+id/iv_logo"
-        android:src="@mipmap/ic_launcher"
+        android:src="@drawable/logo"
         android:clickable="false"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="56dp" />
 
-     <ImageView
-         android:layout_width="100dp"
-         android:layout_height="50dp"
-         android:id="@+id/iv_app"
-         android:background="@drawable/app_nome"
+     <TextView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="VoxApp"
+         android:id="@+id/tv_vox"
          android:layout_alignParentBottom="true"
-         android:layout_centerHorizontal="true" />
+         android:layout_centerHorizontal="true"
+         style="@style/AppTheme"
+         android:textColor="#fafafa"
+         android:textSize="20dp"
+         android:typeface="monospace" />
 
 
  </RelativeLayout>

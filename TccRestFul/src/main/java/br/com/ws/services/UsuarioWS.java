@@ -26,8 +26,9 @@ public class UsuarioWS extends WSTemplate {
 	@Consumes(JSON.UTF8JSON)
 	public Usuario adicionarUsuario(Usuario usuario) {
 		try {
-			System.out.println("Entrei em adicionar usuario");
+			System.out.println("Entrei em adicionar usuario" + usuario.getLogin());
 			Usuario usuarioInserido = insert(usuario);
+		
 			if (usuarioInserido != null) {
 				System.out.println("-----> Usuário adicionado!");
 				return usuarioInserido;

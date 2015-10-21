@@ -3,17 +3,12 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.0"
-
     packagingOptions {
 exclude 'META-INF/LICENSE'
         exclude 'META-INF/NOTICE'
         exclude 'META-INF/notice.txt'
         exclude 'META-INF/license.txt'
-
-
-
     }
-
     defaultConfig {
         applicationId "com.tcc.apptcc"
         minSdkVersion 11
@@ -28,24 +23,18 @@ exclude 'META-INF/LICENSE'
         }
     }
 }
-
 dependencies {
     compile 'com.android.support:appcompat-v7:23.0.1'
 }
 dependencies {
-
     compile 'com.android.support:cardview-v7:23.0.1'}
 dependencies{
-
     compile 'com.android.support:recyclerview-v7:23.0.1'}
-
 dependencies{
     compile 'com.vstechlab.easyfonts:easyfonts:1.0.0'}
 dependencies{
-
     compile 'com.google.code.gson:gson:2.3.1'}
 dependencies{
-
     compile 'org.springframework.android:spring-android-rest-template:1.0.1.RELEASE'}
 dependencies{
     compile 'com.fasterxml.jackson.core:jackson-databind:2.3.2'
@@ -53,12 +42,4 @@ dependencies{
     compile('com.mikepenz:materialdrawer:4.3.6@aar') {
         transitive = true
     }
-
-
-
 }
-
-
-
-
-

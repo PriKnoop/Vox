@@ -16,35 +16,18 @@ import java.util.List;
 public class PessoaProcurada {
 
 	private Long idPessoaProcurada;
-	
 	private String nome;
-
 	private Genero genero ;
-
 	private TipoPessoaProcurada tipoPessoaProcurada; 
 	private Date dataNascimento;
-
-	private Etnia etnia; 
-
-	private Olhos olhos; 
-
-	private TipoFisico tipoFisico ; 
-
-	private CabeloCor cabeloCor; 
-
+	private Etnia etnia;
+	private Olhos olhos;
+	private TipoFisico tipoFisico ;
+	private CabeloCor cabeloCor;
 	private CabeloTipo cabeloTipo;
-	
-
+	private double altura;
 	private Usuario usuario;
-	
 
-	private List<InfoContato> infoContato;
-
-	private List<Foto> foto;
-
-	private List<Avistamento> avistamento;
-
-	
 	public PessoaProcurada() {
 	}
 
@@ -152,22 +135,4 @@ public class PessoaProcurada {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
-
-	public List<InfoContato> getInfoContato() {
-		return infoContato;
-	}
-
-	public void setInfoContato(List<InfoContato> infoContato) {
-		this.infoContato = infoContato;
-	}
-
-	public List<Foto> getFoto() {
-		return foto;
-	}
-
-	public void setFoto(List<Foto> foto) {
-		this.foto = foto;
-	}
-	
-
 }

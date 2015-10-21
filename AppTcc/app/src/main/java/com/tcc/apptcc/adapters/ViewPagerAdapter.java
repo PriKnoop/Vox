@@ -4,8 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.tcc.apptcc.activities.InsertFragment;
-import com.tcc.apptcc.activities.MainFragment;
+import com.tcc.apptcc.activities.InicioFragment;
+import com.tcc.apptcc.activities.PessoasAdicionadasFragment;
 import com.tcc.apptcc.activities.SearchFragment;
 
 /**
@@ -31,13 +31,13 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
         if(position == 0) // if the position is 0 we are returning the First tab
         {
-            InsertFragment insertFragment = new InsertFragment();
-            return insertFragment;
+            PessoasAdicionadasFragment pessoasAdicionadasFragment = new PessoasAdicionadasFragment();
+            return pessoasAdicionadasFragment;
         }
         if(position == 1) // if the position is 0 we are returning the First tab
         {
-            MainFragment mainFragment = new MainFragment();
-            return mainFragment;
+            InicioFragment inicioFragment = new InicioFragment();
+            return inicioFragment;
         }
         else             // As we are having 2 tabs if the position is now 0 it must be 1 so we are returning second tab
         {
