@@ -11,7 +11,7 @@ exclude 'META-INF/LICENSE'
     }
     defaultConfig {
         applicationId "com.tcc.apptcc"
-        minSdkVersion 11
+        minSdkVersion 12
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -39,6 +39,8 @@ dependencies{
 dependencies{
     compile 'com.fasterxml.jackson.core:jackson-databind:2.3.2'
     compile 'com.android.support:design:23.0.0'
+    compile 'com.rengwuxian.materialedittext:library:2.1.4'
+    compile 'com.github.rey5137:material:1.2.1'
     compile('com.mikepenz:materialdrawer:4.3.6@aar') {
         transitive = true
     }

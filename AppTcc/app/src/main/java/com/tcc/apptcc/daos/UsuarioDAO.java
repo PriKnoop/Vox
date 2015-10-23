@@ -126,8 +126,11 @@ public class UsuarioDAO {
             //url que será acessada, tipo do retorno e parametro que o método do ws determinda
 
             Usuario usuarioRetornado = restTemplate.getForObject(URL, Usuario.class, login);
-
-            return true;
+            if(usuarioRetornado == null){
+                return true;
+            } else {
+                return false;
+            }
         } catch (Exception e) {
             e.printStackTrace();
 

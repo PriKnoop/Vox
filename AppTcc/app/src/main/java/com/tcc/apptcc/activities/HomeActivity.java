@@ -28,19 +28,13 @@ import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 import com.tcc.apptcc.adapters.SlidingTabLayout;
 import com.tcc.apptcc.adapters.ViewPagerAdapter;
 
-public class HomeActivity extends AppCompatActivity implements PessoasAdicionadasFragment.OnHeadlineSelectedListener, InicioFragment.OnFragmentInteractionListener, SearchFragment.OnFragmentInteractionListener {
+public class HomeActivity extends AppCompatActivity implements PessoasAdicionadasFragment.OnHeadlineSelectedListener, InicioFragment.OnFragmentInteractionListener, SearchFragment.OnFragmentInteractionListener, AdicionarPessoasFragment.OnFragmentInteractionListener {
 
     // Declaring Your View and Variables
 
     private Drawer navegationDrawerLeft;
-    private Drawer navegationDrawerRight;
     private AccountHeader headerNavegationLeft;
     Toolbar toolbar;
-    ViewPager pager;
-    ViewPagerAdapter adapter;
-    SlidingTabLayout tabs;
-    CharSequence Titles[]={"Adicionar","Principal", "Pesquisar"};
-    int Numboftabs =3;
     public final static String NOME_PREFERENCIA = "preferencias_usuario";
 
     @Override
@@ -175,9 +169,12 @@ public class HomeActivity extends AppCompatActivity implements PessoasAdicionada
 
     }
 
-   @Override
-    public void onFragmentInteraction(Uri uri) {
+    public void onFragmentInteractionListener(){
+        //you can leave it empty
+    }
 
+    public void onFragmentInteraction(Uri uri){
+        //you can leave it empty
     }
 
     private void createNavegationDrawerLeft(Bundle savedInstanceState) {

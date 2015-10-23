@@ -4,22 +4,35 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class PessoasAdicionadasFragment extends ListFragment {
+import com.tcc.apptcc.adapters.ListViewDemoAdapter;
+import com.tcc.apptcc.adapters.ListViewItem;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class PessoasAdicionadasFragment extends Fragment {
+    private List<ListViewItem> mItems;        // ListView items list
+    private ListView lista;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -53,24 +66,33 @@ public class PessoasAdicionadasFragment extends ListFragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+
+        // initialize the items list
+        mItems = new ArrayList<ListViewItem>();
+        Resources resources = getResources();
+
+        mItems.add(new ListViewItem(ContextCompat.getDrawable(getContext(), R.drawable.ic_account_circle_black_24dp), "João Silva da Costa", "Morador de rua"));
+        mItems.add(new ListViewItem(ContextCompat.getDrawable(getContext(), R.drawable.ic_account_circle_black_24dp), "Maria de Jesus", "Abrigada"));
+        mItems.add(new ListViewItem(ContextCompat.getDrawable(getContext(), R.drawable.ic_account_circle_black_24dp), "Pedro dos Santos", "Desaparecido"));
+
+        ListViewDemoAdapter mAdapter = new ListViewDemoAdapter(getActivity(), mItems);
+       // mItems.setAdapter
+
+        // initialize and set the list adapter
+        //setListAdapter(new ListViewDemoAdapter(getContext(), mItems));
+
+        //RecyclerView.Adapter m_adapter = new MobileNETDistinctChatInfoAdapter(getActivity(), R.layout.chatlist_list_item, m_parts);
+
+        //list.setListAdapter(m_adapter); # HERE
+
     }
-
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//        TextView textView = new TextView(getActivity());
-//        textView.setText(R.string.hello_blank_fragment);
-//        return textView;
-//    }
-
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view =inflater.inflate(R.layout.fragment_pessoas_adicionadas,container,false);
-
         inicializaComponentes(view);
-
+       // getListView().setDivider(null);
         this.btnIrParaAdicionarPessoas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,12 +103,6 @@ public class PessoasAdicionadasFragment extends ListFragment {
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
 
     // Container Activity must implement this interface
     public interface OnHeadlineSelectedListener {
@@ -108,8 +124,11 @@ public class PessoasAdicionadasFragment extends ListFragment {
     }
 
     public void onListItemClick(ListView l, View v, int position, long id) {
-        // Send the event to the host activity
-        mCallback.onArticleSelected(position);
+        // retrieve theListView item
+        ListViewItem item = mItems.get(position);
+
+        // do something
+        Toast.makeText(getActivity(), item.title, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -138,6 +157,7 @@ public class PessoasAdicionadasFragment extends ListFragment {
 
     private void inicializaComponentes(View view) {
         btnIrParaAdicionarPessoas = (FloatingActionButton) view.findViewById(R.id.btn_levar_para_adicionar_pessoas);
+        //lista = (ListView) view.findViewById(R.id.list);
 
     }
 

@@ -1,5 +1,18 @@
 package com.tcc.apptcc.enuns;
 
 public enum TipoFisico {
-	MAGRO, FITNESS, INTERMEDIARIO, GORDINHO, OBESO, OUTRO
+	MAGRO("Magro"), INTERMEDIARIO("Intermediário"), SOBREPESO("Sobrepeso"), OBESO(
+			"Obeso"), OUTRO("Outro");
+
+	public String descricao;
+
+	private TipoFisico(String descricao) {
+		this.descricao = descricao;
+	}
+
+	@Override
+	public String toString() {
+		return this.descricao;
+	}
+
 }

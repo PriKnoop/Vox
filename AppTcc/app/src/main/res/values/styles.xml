@@ -11,6 +11,9 @@
         <item name="android:textColorSecondary">#6e6e6e</item>
     </style>
 
+    <style name="SimpleDialog" parent="Material.App.Dialog.Simple.Light">
+    </style>
+
     <style name="stylesVox">stylesVox</style>
 
 </resources>
