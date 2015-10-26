@@ -28,13 +28,13 @@ public class PessoaProcurada {
 	private double altura;
 	private Usuario usuario;
 
-	public PessoaProcurada() {
+						   public PessoaProcurada() {
 	}
 
 	public PessoaProcurada(String nome, Genero genero, TipoPessoaProcurada tipoPessoaProcurada,
-			Date dataNascimento, Etnia etnia, Olhos olhos,
-			TipoFisico tipoFisico, CabeloCor cabeloCor, CabeloTipo cabeloTipo,
-			Usuario usuario) {
+						   Date dataNascimento, Etnia etnia, Olhos olhos,
+						   TipoFisico tipoFisico, CabeloCor cabeloCor, CabeloTipo cabeloTipo,
+			Usuario usuario, Double altura) {
 		super();
 		this.nome = nome;
 		this.genero = genero;
@@ -46,6 +46,7 @@ public class PessoaProcurada {
 		this.cabeloCor = cabeloCor;
 		this.cabeloTipo = cabeloTipo;
 		this.usuario = usuario;
+		this.altura = altura;
 	}
 
 	public Long getIdPessoaProcurada() {
@@ -134,5 +135,13 @@ public class PessoaProcurada {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+	public Double getAltura() {
+		return altura;
+	}
+
+	public void setAltura(Double altura) {
+		this.altura = altura;
 	}
 }

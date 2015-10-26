@@ -112,12 +112,15 @@ public class CadastroActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(loginDigitado) || TextUtils.isEmpty(senhaDigitada) || TextUtils.isEmpty(senhaRepetidaDigitada)) {
             if (TextUtils.isEmpty(loginDigitado)) {
                 etLoginCadastro.setError("Por favor, insira seu login!");
+                return false;
             }
             if (TextUtils.isEmpty(senhaDigitada)) {
                 etSenhaCadastro.setError("Insira sua senha!");
+                return false;
             }
             if (TextUtils.isEmpty(senhaRepetidaDigitada)) {
                 etSenhaRepetida.setError("Insira sua senha novamente!");
+                return false;
             }
         } else {
             Boolean loginDisponivel = usuarioDAO.chamaMetodoVerificarLogin(loginDigitado);
@@ -195,11 +198,11 @@ public class CadastroActivity extends AppCompatActivity {
                 startActivity(itTelaPrincipal);
             } else {
 
-                Toast.makeText(CadastroActivity.this, "UsuÃ¡rio nÃ£o cadastrado!", Toast.LENGTH_LONG).show();
+                Toast.makeText(CadastroActivity.this, "Usuário não cadastrado!", Toast.LENGTH_LONG).show();
             }
         }
     }
-    private boolean verificaSeUsuarioJaLogou() {
+    private boolean SeUsuarioJaLogou() {
         SharedPreferences spPreferencias = getApplicationContext().getSharedPreferences(NOME_PREFERENCIA, MODE_APPEND);
         boolean logou = false;
         Long preferencesId = spPreferencias.getLong("id", 0);

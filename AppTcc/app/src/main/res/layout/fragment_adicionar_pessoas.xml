@@ -48,8 +48,6 @@
                 android:id="@+id/et_pessoa_tipo"
                 android:clickable="true"
                 android:linksClickable="true" />
-
-
         </LinearLayout>
 
         <LinearLayout
@@ -106,6 +104,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Altura"
                 app:met_maxCharacters="4"
+                android:inputType="number"
                 android:id="@+id/et_pessoa_altura"
                 app:met_floatingLabel="highlight"/>
 
@@ -124,6 +123,13 @@
                 android:focusable="false"
                 android:id="@+id/et_pessoa_cabelotipo"
                 app:met_floatingLabel="highlight"/>
+
+            <com.rey.material.widget.FloatingActionButton
+            android:id="@+id/button_bt_float_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/LightFABColor"
+            android:layout_gravity="right" />
 
             <TextView
                 android:layout_width="match_parent"

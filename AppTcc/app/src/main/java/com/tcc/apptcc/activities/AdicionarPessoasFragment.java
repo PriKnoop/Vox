@@ -6,10 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,12 +29,18 @@ import com.rengwuxian.materialedittext.validation.RegexpValidator;
 import com.rey.material.app.DatePickerDialog;
 import com.rey.material.app.DialogFragment;
 import com.rey.material.app.SimpleDialog;
+import com.rey.material.widget.FloatingActionButton;
 import com.tcc.apptcc.adapters.Mascara;
+import com.tcc.apptcc.daos.PessoaProcuradaDAO;
+import com.tcc.apptcc.enuns.TipoPessoaProcurada;
+import com.tcc.apptcc.pojos.PessoaProcurada;
+import com.tcc.apptcc.pojos.Usuario;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class AdicionarPessoasFragment extends android.support.v4.app.Fragment implements View.OnClickListener {
     EditText singleLineEllipsisEt;
@@ -41,10 +49,17 @@ public class AdicionarPessoasFragment extends android.support.v4.app.Fragment im
     private Button setErrorBt, setError2Bt, setError3Bt, validateBt;
     private MaterialEditText validationEt;
     private TextWatcher mascaraAltura;
+    FloatingActionButton btEnviarPessoa;
 
-    private EditText etPessoaNome, etPessoaTipo, etPessoaGenero, etDataNascimento, etEtnia, etOlhos, etFisico, etCabeloCor, etCabeloTipo, etAltura;
+    PessoaProcuradaDAO pessoaProcuradaDAO;
+
+    SharedPreferences preferences;
+    public final static String NOME_PREFERENCIA = "preferencias_usuario";
+
+    private MaterialEditText etPessoaNome, etPessoaTipo, etPessoaGenero, etDataNascimento, etEtnia, etOlhos, etFisico, etCabeloCor, etCabeloTipo, etAltura;
     private String pessoaNome, pessoaTipo, pessoaGenero, pessoaEtnia, pessoaOlhos, pessoaFisico, pessoaCabeloCor, pessoaCabeloTipo;
-    private float pessoaAltura;
+    private TipoPessoaProcurada tipoPessoaProcurada;
+    private double pessoaAltura;
     private Date pessoaDataNascimento;
     private Long idUsuario;
 
@@ -78,6 +93,9 @@ public class AdicionarPessoasFragment extends android.support.v4.app.Fragment im
         View view = inflater.inflate(R.layout.fragment_adicionar_pessoas, container, false);
         inicializaComponentes(view);
 
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
         etPessoaTipo.setOnClickListener(this);
         etPessoaGenero.setOnClickListener(this);
         etDataNascimento.setOnClickListener(this);
@@ -86,6 +104,8 @@ public class AdicionarPessoasFragment extends android.support.v4.app.Fragment im
         etOlhos.setOnClickListener(this);
         etCabeloCor.setOnClickListener(this);
         etCabeloTipo.setOnClickListener(this);
+        btEnviarPessoa.setOnClickListener(listener_delay);
+        etAltura.addValidator(new RegexpValidator("Digite apenas números!", "\\d+"));
 
 
 
@@ -145,18 +165,21 @@ public class AdicionarPessoasFragment extends android.support.v4.app.Fragment im
     }
 
     private void inicializaComponentes(View view) {
-        etPessoaNome = (EditText) view.findViewById(R.id.et_pessoa_nome);
-        etPessoaTipo = (EditText) view.findViewById(R.id.et_pessoa_tipo);
-        etPessoaGenero = (EditText) view.findViewById(R.id.et_pessoa_genero);
-        etDataNascimento = (EditText) view.findViewById(R.id.et_pessoa_datanascimento);
-        etEtnia = (EditText) view.findViewById(R.id.et_pessoa_etnia);
-        etOlhos = (EditText) view.findViewById(R.id.et_pessoa_olhos);
-        etFisico = (EditText) view.findViewById(R.id.et_pessoa_tipofisico);
-        etCabeloCor = (EditText) view.findViewById(R.id.et_pessoa_cabelocor);
-        etCabeloTipo = (EditText) view.findViewById(R.id.et_pessoa_cabelotipo);
-        etAltura = (EditText) view.findViewById(R.id.et_pessoa_altura);
+        etPessoaNome = (MaterialEditText) view.findViewById(R.id.et_pessoa_nome);
+        etPessoaTipo = (MaterialEditText) view.findViewById(R.id.et_pessoa_tipo);
+        etPessoaGenero = (MaterialEditText) view.findViewById(R.id.et_pessoa_genero);
+        etDataNascimento = (MaterialEditText) view.findViewById(R.id.et_pessoa_datanascimento);
+        etEtnia = (MaterialEditText) view.findViewById(R.id.et_pessoa_etnia);
+        etOlhos = (MaterialEditText) view.findViewById(R.id.et_pessoa_olhos);
+        etFisico = (MaterialEditText) view.findViewById(R.id.et_pessoa_tipofisico);
+        etCabeloCor = (MaterialEditText) view.findViewById(R.id.et_pessoa_cabelocor);
+        etCabeloTipo = (MaterialEditText) view.findViewById(R.id.et_pessoa_cabelotipo);
+        etAltura = (MaterialEditText) view.findViewById(R.id.et_pessoa_altura);
+        btEnviarPessoa = (FloatingActionButton)view.findViewById(R.id.button_bt_float_color);
 
         mascaraAltura = Mascara.insert("#,##", etAltura);
+
+        pessoaProcuradaDAO = new PessoaProcuradaDAO();
 
         singleLineEllipsisEt = (EditText) view.findViewById(R.id.singleLineEllipsisEt);
         bottomTextEt = (EditText) view.findViewById(R.id.bottomTextEt);
@@ -210,8 +233,13 @@ public class AdicionarPessoasFragment extends android.support.v4.app.Fragment im
             case R.id.et_pessoa_tipo:
                 builder = new SimpleDialog.Builder(R.style.SimpleDialog) {
                     public void onPositiveActionClicked(DialogFragment fragment) {
-                        pessoaTipo = getSelectedValue().toString();
-                        etPessoaTipo.setText(pessoaTipo);
+                        for (TipoPessoaProcurada tipo : TipoPessoaProcurada.values()){
+                            if(getSelectedValue().toString().equals(tipo.descricao)){
+                                tipoPessoaProcurada = tipo;
+                            }
+
+                        }
+                        etPessoaTipo.setText(getSelectedValue().toString());
                         fragment.dismiss();
                     }
 
@@ -381,6 +409,119 @@ public class AdicionarPessoasFragment extends android.support.v4.app.Fragment im
         }
         DialogFragment fragment = DialogFragment.newInstance(builder);
         fragment.show(getFragmentManager(), null);
+    }
+
+
+    View.OnClickListener listener_delay = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            if(v instanceof FloatingActionButton){
+                FloatingActionButton bt = (FloatingActionButton)v;
+                bt.setLineMorphingState((bt.getLineMorphingState() + 1) % 2, true);
+                Toast.makeText(getActivity(), "Cliquei em enviar", Toast.LENGTH_SHORT).show();
+                verificaSeUsuarioEstaLogado();
+                validarCampos();
+
+                if(validarCampos()){
+                    pessoaNome = etPessoaNome.getText().toString();
+                    pessoaAltura = Double.parseDouble(etAltura.getText().toString());
+
+
+                    Usuario usuarioCadastrou = new Usuario();
+                    usuarioCadastrou.setIdUsuario(idUsuario);
+
+                    PessoaProcurada pessoaEnviada = new PessoaProcurada();
+                    pessoaEnviada.setUsuario(usuarioCadastrou);
+                    pessoaEnviada.setNome(pessoaNome);
+                    pessoaEnviada.setTipoPessoaProcurada(tipoPessoaProcurada);
+                    pessoaEnviada.setAltura(pessoaAltura);
+
+                    new HttpRequestTaskPessoaProcurada().execute(pessoaEnviada);
+
+
+
+                }
+
+
+            }
+
+//                System.out.println(v + " " + ((RippleDrawable)v.getBackground()).getDelayClickType());
+        }
+    };
+
+    private boolean validarCampos(){
+        boolean valido = false;
+        if (!etPessoaNome.getText().toString().matches("[a-zA-Z ]*") || etPessoaNome.length() < 2) {
+            etPessoaNome.setError("Nome Inválido!");
+            return false; }
+
+            if (TextUtils.isEmpty(pessoaGenero)) {
+                etPessoaGenero.setError("Escolha o gênero!");
+                return false;
+            }
+
+        if(TextUtils.isEmpty(etAltura.getText().toString()) ||etAltura.length() < 3){
+            etAltura.setError("Altura inválida! (Digite em cm)");
+            return false;
+        }
+        else {
+            return true;
+        }
+      /*  etAltura.validate();
+       etDataNascimento.validate();
+        etPessoaGenero.validate();
+        etCabeloTipo.validate();
+        etPessoaTipo.validate();
+        etPessoaNome.validate();
+        etCabeloCor.validate();
+        etEtnia.validate();
+        etFisico.validate();
+        etOlhos.validate();*/
+
+    }
+
+    private class HttpRequestTaskPessoaProcurada extends AsyncTask<PessoaProcurada, String, PessoaProcurada> {
+
+
+        @Override
+        protected PessoaProcurada doInBackground(PessoaProcurada... params) {
+            Log.i("DEBUG", params[0].getNome().toString());
+            PessoaProcurada pessoaRetornada = pessoaProcuradaDAO.chamaMetodoAdicionarPessoaProcurada(params[0]);
+            return pessoaRetornada;
+
+        }
+
+        protected void onProgressUpdate() {
+            com.rey.material.app.Dialog.Builder builder = null;
+            builder = new SimpleDialog.Builder(R.style.SimpleDialog){
+
+
+
+            };
+
+            ((SimpleDialog.Builder)builder).message("Aguarde...");
+            DialogFragment fragment = DialogFragment.newInstance(builder);
+            fragment.show(getFragmentManager(), null);
+        }
+
+        protected void onPostExecute(PessoaProcurada pessoa) {
+            if (pessoa != null) {
+                Toast.makeText(getContext(), "Pessoa Cadastrada!!", Toast.LENGTH_LONG).show();
+                replaceFragment(new InicioFragment());
+            } else {
+                Toast.makeText(getContext(), "Pessoa não cadastrada!", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+    private void verificaSeUsuarioEstaLogado() {
+        SharedPreferences spPreferencias = getContext().getApplicationContext().getSharedPreferences(NOME_PREFERENCIA, Context.MODE_APPEND);
+        Long preferencesId = spPreferencias.getLong("id", 0);
+        if (preferencesId != 0) {
+            idUsuario = preferencesId;
+        } else {
+            startActivity(new Intent(getContext(), LoginActivity.class));
+        }
     }
 
 }

@@ -3,6 +3,7 @@ package com.tcc.apptcc.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -52,6 +53,9 @@ public class HomeActivity extends AppCompatActivity implements PessoasAdicionada
         createHeaderToNavegationDrawer();
         createNavegationDrawerLeft(savedInstanceState);
         addItemsToNavegationDrawer();
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
 
 
         /*// Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
