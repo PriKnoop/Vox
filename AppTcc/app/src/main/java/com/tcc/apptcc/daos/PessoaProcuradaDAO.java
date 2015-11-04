@@ -3,17 +3,28 @@ package com.tcc.apptcc.daos;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.tcc.apptcc.adapters.IPConfig;
 import com.tcc.apptcc.adapters.Json;
 import com.tcc.apptcc.pojos.PessoaProcurada;
 import com.tcc.apptcc.pojos.Usuario;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
+
+import java.lang.reflect.Array;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Pri on 23/10/2015.
@@ -22,14 +33,14 @@ public class PessoaProcuradaDAO {
 
     private static final String ip = new IPConfig().getIP();
 
-    private static final String URL_PADRAO = ip +":8080/WSRest/rest/pessoa";
+    private static final String URL_PADRAO = ip + ":8080/WSRest/rest/pessoa";
 
     public PessoaProcurada chamaMetodoAdicionarPessoaProcurada(PessoaProcurada pessoa) {
 
         String URL = URL_PADRAO + "";
 
         try {
-            if (pessoa.getNome() != null){
+            if (pessoa.getNome() != null) {
 
                 Gson gson = new Gson();
                 String json = gson.toJson(pessoa);
@@ -39,7 +50,7 @@ public class PessoaProcuradaDAO {
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
                 restTemplate.setRequestFactory(
                         new HttpComponentsClientHttpRequestFactory());
-                PessoaProcurada pessoaRetornada = restTemplate.postForObject(URL, pessoa, PessoaProcurada.class );
+                PessoaProcurada pessoaRetornada = restTemplate.postForObject(URL, pessoa, PessoaProcurada.class);
 
                 return pessoaRetornada;
             }
@@ -75,6 +86,40 @@ public class PessoaProcuradaDAO {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public List<PessoaProcurada> chamaMetodoPesquisarTodasPessoasCadastradas() {
+
+        String URL = URL_PADRAO + "/pesquisarTodos";
+
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            restTemplate.setRequestFactory(
+                    new HttpComponentsClientHttpRequestFactory());
+
+            ArrayList<PessoaProcurada> listaPessoasRetornadas = new ArrayList<PessoaProcurada>();
+            Gson gson = new Gson();
+
+            //List<ResponseEntity<PessoaProcurada[]>> pessoasRetornadas = Arrays.asList(restTemplate.getForEntity(URL, PessoaProcurada[].class));
+            // List pessoasRetornadas = restTemplate.getForObject(URL, ArrayList.class);
+            // List<PessoaProcurada> mcList = Arrays.asList(pArray);
+            // List pessoasRetornadasList = Arrays.asList(restTemplate.getForObject(URL, PessoaProcurada[].class));
+
+
+            try {
+                JSONObject response = Json.get(URL);
+                JSONArray array = response.getJSONArray("pessoaProcurada");
+                for (int i = 0; i < array.length(); i++) {
+                    listaPessoasRetornadas.add(gson.fromJson(array.get(i).toString(), PessoaProcurada.class));
+
+                    // listaPessoasRetornadas.add(new PessoaProcurada().fromJSON(new JSONObject(array.get(i).toString())));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return listaPessoasRetornadas;
+
+
     }
 }
 

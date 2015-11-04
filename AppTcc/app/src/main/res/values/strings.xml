@@ -28,4 +28,8 @@
     <string name="str_senha">Senha</string>
     <string name="title_activity_usuario_logado">UsuarioLogadoActivity</string>
     <string name="action_logout">Logout</string>
+    <string name="title_activity_mapa_perfil_teste">Map</string>
+
+    <string name="str_google_places_browser">AIzaSyBBYlmZrqOFxtnXF3Ay8O3-37_5XryUrqg</string>
+
 </resources>

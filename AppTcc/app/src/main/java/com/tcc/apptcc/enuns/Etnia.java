@@ -2,7 +2,7 @@ package com.tcc.apptcc.enuns;
 
 public enum Etnia {
 	CAUCASIANA("Caucasiana"), NEGRA("Negra"), INDIGENA("Indigena"), PARDA(
-			"Parda"), MULATA("Mulata"), CABOCLA("Cabocla"), CAFUZA("Cafuza"), OUTRA(
+			"Parda"), OUTRA(
 			"Outra");
 
 	public String descricao;

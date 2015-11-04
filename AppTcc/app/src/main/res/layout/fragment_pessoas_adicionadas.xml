@@ -14,16 +14,21 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
-    <android.support.design.widget.FloatingActionButton
+    <com.tcc.apptcc.adapters.CustomAutoCompleteTextView
+        android:id="@+id/atv_places"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:hint="Insira o local aqui" />
+
+    <com.rey.material.widget.FloatingActionButton
         android:id="@+id/btn_levar_para_adicionar_pessoas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:src="@drawable/ic_add_white_24dp"
+        style="@style/LightFABColor"
+        android:layout_gravity="right"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="20dp"
-        android:clickable="true" />
+        android:layout_alignParentEnd="true" />
 
     </RelativeLayout>

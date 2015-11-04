@@ -200,6 +200,8 @@ public class HomeActivity extends AppCompatActivity implements PessoasAdicionada
                         if (drawerItem != null) {
 
                             if (drawerItem.getIdentifier() == 1) { //Inicio
+                                replaceFragment(new InicioFragment());
+
                                 //startSupportActionMode(new ActionBarCallBack());
                                 //findViewById(R.id.action_mode_bar).setBackgroundColor(UIUtils.getThemeColorFromAttrOrRes(HomeActivity.this, R.attr.colorPrimary, R.color.material_drawer_primary));
                             } else if (drawerItem.getIdentifier() == 3) {

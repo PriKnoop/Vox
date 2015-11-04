@@ -10,7 +10,7 @@ import java.util.Date;
 
 public class Circunstancia {
 	private Long idCircunstancia;
-	private Date data;
+	private String data;
 	private String detalhes;
 
 	private PessoaProcurada pessoaProcurada;
@@ -19,7 +19,7 @@ public class Circunstancia {
 	
 	public Circunstancia(){}
 
-	public Circunstancia(Date data, String detalhes,
+	public Circunstancia(String data, String detalhes,
 			PessoaProcurada pessoaProcurada, Avistamento avistamento) {
 		super();
 		this.data = data;
@@ -36,11 +36,11 @@ public class Circunstancia {
 		this.idCircunstancia = idCircunstancia;
 	}
 
-	public Date getData() {
+	public String getData() {
 		return data;
 	}
 
-	public void setData(Date data) {
+	public void setData(String data) {
 		this.data = data;
 	}
 

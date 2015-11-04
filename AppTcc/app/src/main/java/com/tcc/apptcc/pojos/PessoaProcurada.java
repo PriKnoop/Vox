@@ -19,7 +19,7 @@ public class PessoaProcurada {
 	private String nome;
 	private Genero genero ;
 	private TipoPessoaProcurada tipoPessoaProcurada; 
-	private Date dataNascimento;
+	private String dataNascimento;
 	private Etnia etnia;
 	private Olhos olhos;
 	private TipoFisico tipoFisico ;
@@ -32,7 +32,7 @@ public class PessoaProcurada {
 	}
 
 	public PessoaProcurada(String nome, Genero genero, TipoPessoaProcurada tipoPessoaProcurada,
-						   Date dataNascimento, Etnia etnia, Olhos olhos,
+						   String dataNascimento, Etnia etnia, Olhos olhos,
 						   TipoFisico tipoFisico, CabeloCor cabeloCor, CabeloTipo cabeloTipo,
 			Usuario usuario, Double altura) {
 		super();
@@ -81,11 +81,11 @@ public class PessoaProcurada {
 		this.tipoPessoaProcurada = tipoPessoaProcurada;
 	}
 
-	public Date getDataNascimento() {
+	public String getDataNascimento() {
 		return dataNascimento;
 	}
 
-	public void setDataNascimento(Date dataNascimento) {
+	public void setDataNascimento(String dataNascimento) {
 		this.dataNascimento = dataNascimento;
 	}
 
