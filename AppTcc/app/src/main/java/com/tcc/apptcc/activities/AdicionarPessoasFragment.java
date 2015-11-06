@@ -4,12 +4,17 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Html;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -18,17 +23,31 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.places.AutocompletePrediction;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceBuffer;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.rengwuxian.materialedittext.validation.RegexpValidator;
 import com.rey.material.app.DatePickerDialog;
+import com.rey.material.app.Dialog;
 import com.rey.material.app.DialogFragment;
 import com.rey.material.app.SimpleDialog;
 import com.rey.material.widget.FloatingActionButton;
 import com.tcc.apptcc.adapters.Mascara;
+import com.tcc.apptcc.adapters.PlaceAutocompleteAdapter;
 import com.tcc.apptcc.daos.AvistamentoDAO;
 import com.tcc.apptcc.daos.CircunstanciaDAO;
 import com.tcc.apptcc.daos.LocalizacaoDAO;
@@ -50,8 +69,12 @@ import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 
-public class AdicionarPessoasFragment extends android.support.v4.app.Fragment implements View.OnClickListener {
+import static com.google.android.gms.location.places.Places.GEO_DATA_API;
+import static com.google.android.gms.location.places.Places.PLACE_DETECTION_API;
+
+public class AdicionarPessoasFragment extends android.support.v4.app.Fragment implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
     private OnFragmentInteractionListener mListener;
     private MaterialEditText validationEt;
     private TextWatcher mascaraAltura;
@@ -64,8 +87,9 @@ public class AdicionarPessoasFragment extends android.support.v4.app.Fragment im
     SharedPreferences preferences;
     public final static String NOME_PREFERENCIA = "preferencias_usuario";
 
-    private MaterialEditText etPessoaNome, etPessoaTipo, etLocalizacaoAvistamento, etPessoaGenero, etDataNascimento, etEtnia, etOlhos, etFisico, etCabeloCor, etCabeloTipo, etAltura, etVistoUltimo, etDetalhesAvistamento;
-    private String pessoaNome, detalhesAvistamento, localizacaoAvistamento;
+    private MaterialEditText etPessoaNome, etPessoaTipo, etPessoaGenero, etDataNascimento, etEtnia, etOlhos, etFisico, etCabeloCor, etCabeloTipo, etAltura, etVistoUltimo, etDetalhesAvistamento;
+    private String pessoaNome, detalhesAvistamento, localizacaoAvistamentoDetalhes, localizacaoAvistamentoCidade, localizacaoAvistamentoEstado;
+    private AutoCompleteTextView acLocalizacaoAvistamento;
     private TipoPessoaProcurada tipoPessoaProcurada;
     private Genero pessoaGenero;
     private Etnia pessoaEtnia;
@@ -74,12 +98,17 @@ public class AdicionarPessoasFragment extends android.support.v4.app.Fragment im
     private CabeloCor pessoaCabeloCor;
     private CabeloTipo pessoaCabeloTipo;
     private double pessoaAltura;
+    private float localizacaoAvistamentoLatitude, localizacaoAvistamentoLongitude;
     private String pessoaDataNascimento, pessoaDataAvistamento;
     private Long idUsuario;
     View viewCustom;
     // private Button btEscolherDataAvistamento;
     private FloatingActionButton btEnviarPessoa;
 
+    private GoogleApiClient googleApiClient;
+    private PlaceAutocompleteAdapter mAdapter;
+    private static final LatLngBounds LIMITES_BRASIL = new LatLngBounds(
+            new LatLng(-33.750833, -73.992222), new LatLng(5.272222, 34.791667));
 
     public static AdicionarPessoasFragment newInstance(String param1, String param2) {
         AdicionarPessoasFragment fragment = new AdicionarPessoasFragment();
@@ -99,6 +128,15 @@ public class AdicionarPessoasFragment extends android.support.v4.app.Fragment im
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        googleApiClient = new GoogleApiClient
+                .Builder(getContext())
+                .enableAutoManage(getActivity(), 0 /* clientId */, this)
+                .addApi(GEO_DATA_API)
+                .addApi(PLACE_DETECTION_API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
     }
 
     @Nullable
@@ -114,8 +152,17 @@ public class AdicionarPessoasFragment extends android.support.v4.app.Fragment im
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+        // Set up the adapter that will retrieve suggestions from the Places Geo Data API that cover
+        // the entire world.
+        mAdapter = new PlaceAutocompleteAdapter(getContext(), googleApiClient, LIMITES_BRASIL,
+                null);
+
         // View viewCustom = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_avistamento, null);
         //btEscolherDataAvistamento = (Button) viewCustom.findViewById(R.id.btn_escolher_data_avistamento);
+
+        //acLocalizacaoAvistamento = (AutoCompleteTextView) builder.getDialog().findViewById(R.id.autocomplete_places);
+        acLocalizacaoAvistamento.setOnItemClickListener(mAutocompleteClickListener);
+        acLocalizacaoAvistamento.setAdapter(mAdapter);
 
         etPessoaTipo.setOnClickListener(this);
         etPessoaGenero.setOnClickListener(this);
@@ -200,10 +247,8 @@ public class AdicionarPessoasFragment extends android.support.v4.app.Fragment im
         etVistoUltimo = (MaterialEditText) view.findViewById(R.id.et_visto_ultimo);
         btEnviarPessoa = (FloatingActionButton) view.findViewById(R.id.button_bt_float_color);
 
-        //btEscolherDataAvistamento = (Button) viewCustom.findViewById(R.id.btn_escolher_data_avistamento);
+        acLocalizacaoAvistamento = (AutoCompleteTextView) view.findViewById(R.id.autocomplete_places);
 
-        etDetalhesAvistamento = (MaterialEditText) viewCustom.findViewById(R.id.et_detalhes_avistamento);
-        etLocalizacaoAvistamento = (MaterialEditText) viewCustom.findViewById(R.id.et_localizacao_avistamento);
 
         mascaraAltura = Mascara.insert("#,##", etAltura);
 
@@ -433,21 +478,14 @@ public class AdicionarPessoasFragment extends android.support.v4.app.Fragment im
 
                         DialogFragment fragment = DialogFragment.newInstance(builderData);
                         fragment.show(getFragmentManager(), null);
-
                     }
 
-
-                    public void onPositiveActionClicked(DialogFragment fragment) {
-                        MaterialEditText et_detalhes_avistamento = (MaterialEditText)fragment.getDialog().findViewById(R.id.et_detalhes_avistamento);
-                        Toast.makeText(getActivity(), "Detalhes" + et_detalhes_avistamento.getText().toString(), Toast.LENGTH_SHORT).show();
-
-                        MaterialEditText et_localizacao_avistamento = (MaterialEditText)fragment.getDialog().findViewById(R.id.et_localizacao_avistamento);
-
-
-                        detalhesAvistamento = et_detalhes_avistamento.getText().toString();
-                        localizacaoAvistamento = et_localizacao_avistamento.getText().toString();
+                        public void onPositiveActionClicked(DialogFragment fragment) {
+                        etDetalhesAvistamento = (MaterialEditText) fragment.getDialog().findViewById(R.id.et_detalhes_avistamento);
+                        Toast.makeText(getActivity(), "Detalhes" + etDetalhesAvistamento.getText().toString(), Toast.LENGTH_SHORT).show();
+                        //MaterialEditText et_localizacao_avistamento = (MaterialEditText)fragment.getDialog().findViewById(R.id.et_localizacao_avistamento);
+                        detalhesAvistamento = etDetalhesAvistamento.getText().toString();
                         fragment.dismiss();
-                        //super.onPositiveActionClicked(fragment);
                     }
 
                     public void onNegativeActionClicked(DialogFragment fragment) {
@@ -456,10 +494,12 @@ public class AdicionarPessoasFragment extends android.support.v4.app.Fragment im
                         // super.onNegativeActionClicked(fragment);
                     }
                 };
+
                 builder.title("Detalhes de avistamento")
                         .positiveAction("OK")
                         .negativeAction("CANCELAR")
                         .contentView(R.layout.dialog_avistamento);
+
                 break;
 
             case R.id.et_pessoa_datanascimento:
@@ -599,6 +639,7 @@ public class AdicionarPessoasFragment extends android.support.v4.app.Fragment im
             PessoaProcurada pessoaRetornada = pessoaProcuradaDAO.chamaMetodoAdicionarPessoaProcurada(params[0]);
             return pessoaRetornada;
         }
+
         @Override
         protected void onProgressUpdate(String... values) {
             com.rey.material.app.Dialog.Builder builder;
@@ -609,6 +650,7 @@ public class AdicionarPessoasFragment extends android.support.v4.app.Fragment im
             fragment.show(getFragmentManager(), null);
             super.onProgressUpdate(values);
         }
+
         protected void onPostExecute(PessoaProcurada pessoa) {
             if (pessoa != null) {
                 Toast.makeText(getContext(), "Pessoa Cadastrada!!", Toast.LENGTH_LONG).show();
@@ -632,6 +674,7 @@ public class AdicionarPessoasFragment extends android.support.v4.app.Fragment im
             Avistamento avistamentoRetornado = avistamentoDAO.chamaMetodoAdicionarAvistamento(params[0]);
             return avistamentoRetornado;
         }
+
         @Override
         protected void onProgressUpdate(String... values) {
             com.rey.material.app.Dialog.Builder builder;
@@ -667,6 +710,7 @@ public class AdicionarPessoasFragment extends android.support.v4.app.Fragment im
             Circunstancia circunstanciaRetornada = circunstanciaDAO.chamaMetodoAdicionarCircunstancia(params[0]);
             return circunstanciaRetornada;
         }
+
         @Override
         protected void onProgressUpdate(String... values) {
             com.rey.material.app.Dialog.Builder builder;
@@ -684,7 +728,12 @@ public class AdicionarPessoasFragment extends android.support.v4.app.Fragment im
                 Toast.makeText(getContext(), "Circunstancia Cadastrada!!", Toast.LENGTH_LONG).show();
                 //Definindo Localizacao
                 Localizacao localizacaoEnviada = new Localizacao();
-                localizacaoEnviada.setDescricao(localizacaoAvistamento);
+                localizacaoEnviada.setCircunstancia(circunstancia);
+                localizacaoEnviada.setDescricao(localizacaoAvistamentoDetalhes);
+                localizacaoEnviada.setCidade(localizacaoAvistamentoCidade);
+                localizacaoEnviada.setUf(localizacaoAvistamentoEstado);
+                localizacaoEnviada.setLatitude(localizacaoAvistamentoLatitude);
+                localizacaoEnviada.setLongitude(localizacaoAvistamentoLongitude);
 
                 new HttpRequestTaskLocalizacao().execute(localizacaoEnviada);
             } else {
@@ -692,6 +741,7 @@ public class AdicionarPessoasFragment extends android.support.v4.app.Fragment im
             }
         }
     }
+
     private class HttpRequestTaskLocalizacao extends AsyncTask<Localizacao, String, Localizacao> {
         @Override
         protected Localizacao doInBackground(Localizacao... params) {
@@ -699,6 +749,7 @@ public class AdicionarPessoasFragment extends android.support.v4.app.Fragment im
             Localizacao localizacaoRetornada = localizacaoDAO.chamaMetodoAdicionarLocalizacao(params[0]);
             return localizacaoRetornada;
         }
+
         @Override
         protected void onProgressUpdate(String... values) {
             com.rey.material.app.Dialog.Builder builder;
@@ -731,5 +782,153 @@ public class AdicionarPessoasFragment extends android.support.v4.app.Fragment im
         } else {
             startActivity(new Intent(getContext(), LoginActivity.class));
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        googleApiClient.connect();
+    }
+
+    @Override
+    public void onStop() {
+        googleApiClient.disconnect();
+        super.onStop();
+    }
+
+
+    @Override
+    public void onConnected(Bundle bundle) {
+
+    }
+
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+
+    /**
+     * Listener that handles selections from suggestions from the AutoCompleteTextView that
+     * displays Place suggestions.
+     * Gets the place id of the selected item and issues a request to the Places Geo Data API
+     * to retrieve more details about the place.
+     *
+     * @see com.google.android.gms.location.places.GeoDataApi#getPlaceById(com.google.android.gms.common.api.GoogleApiClient,
+     * String...)
+     */
+    private AdapterView.OnItemClickListener mAutocompleteClickListener
+            = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            /*
+             Retrieve the place ID of the selected item from the Adapter.
+             The adapter stores each Place suggestion in a AutocompletePrediction from which we
+             read the place ID and title.
+              */
+            final AutocompletePrediction item = mAdapter.getItem(position);
+            final String placeId = item.getPlaceId();
+            final CharSequence primaryText = item.getPrimaryText(null);
+
+            Log.i("DEBUG", "Autocomplete item selected: " + primaryText);
+
+            /*
+             Issue a request to the Places Geo Data API to retrieve a Place object with additional
+             details about the place.
+              */
+            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
+                    .getPlaceById(googleApiClient, placeId);
+            placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
+
+            Toast.makeText(getContext(), "Nome Local: " + primaryText,
+                    Toast.LENGTH_SHORT).show();
+            Log.i("Debug", "Called getPlaceById to get Place details for " + placeId);
+        }
+    };
+
+    /**
+     * Callback for results from a Places Geo Data API query that shows the first place result in
+     * the details view on screen.
+     */
+    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback
+            = new ResultCallback<PlaceBuffer>() {
+        @Override
+        public void onResult(PlaceBuffer places) {
+            if (!places.getStatus().isSuccess()) {
+                // Request did not complete successfully
+                Log.e("Debug", "Place query did not complete. Error: " + places.getStatus().toString());
+                places.release();
+                return;
+            }
+            // Get the Place object from the buffer.
+            final Place place = places.get(0);
+
+            Geocoder geoCoder = new Geocoder(getContext());
+
+            // Format details of the place for display and show it in a TextView.
+            //PEGANDO DETALHES DE UM LOCAL
+            localizacaoAvistamentoDetalhes = place.getAddress().toString();
+            localizacaoAvistamentoLatitude = (float) place.getLatLng().latitude;
+            localizacaoAvistamentoLongitude = (float) place.getLatLng().longitude;
+            try {
+                List<Address> geoCoderEndereco = geoCoder.getFromLocation(place.getLatLng().latitude, place.getLatLng().longitude, 1);
+                //geoCoderEndereco.get(0).getAdminArea();
+
+                localizacaoAvistamentoCidade = geoCoderEndereco.get(0).getLocality();
+                localizacaoAvistamentoEstado = geoCoderEndereco.get(0).getAdminArea();
+
+                Toast.makeText(getContext(),
+                        "Endereço place: " + place.getAddress().toString(),
+                        Toast.LENGTH_LONG).show();
+
+                Toast.makeText(getContext(),
+                        "Cidade: " + geoCoderEndereco.get(0).getLocality(),
+                        Toast.LENGTH_LONG).show();
+
+
+                Toast.makeText(getContext(),
+                        "Estado: " + geoCoderEndereco.get(0).getAdminArea(),
+                        Toast.LENGTH_LONG).show();
+
+            } catch (java.io.IOException e){
+                e.printStackTrace();
+            }
+            /*mPlaceDetailsText.setText(formatPlaceDetails(getResources(), place.getName(),
+                    place.getId(), place.getAddress(), place.getPhoneNumber(),
+                    place.getWebsiteUri()));*/
+
+            Log.i("DEBUG", "Place details received: " + place.getName());
+
+            places.release();
+        }
+    };
+
+    private static Spanned formatPlaceDetails(Resources res, CharSequence name, String id,
+                                              CharSequence address, CharSequence phoneNumber, Uri websiteUri) {
+        Log.e("DEBUG", res.getString(R.string.hello_world, name, id, address, phoneNumber,
+                websiteUri));
+        return Html.fromHtml(res.getString(R.string.hello_world, name, id, address, phoneNumber,
+                websiteUri));
+
+    }
+
+    /**
+     * Called when the Activity could not connect to Google Play services and the auto manager
+     * could resolve the error automatically.
+     * In this case the API is not available and notify the user.
+     *
+     * @param connectionResult can be inspected to determine the cause of the failure
+     */
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+        Log.e("DEBUG", "onConnectionFailed: ConnectionResult.getErrorCode() = "
+                + connectionResult.getErrorCode());
+
+        // TODO(Developer): Check error code and notify the user of error state and resolution.
+        Toast.makeText(getContext(),
+                "Could not connect to Google API Client: Error " + connectionResult.getErrorCode(),
+                Toast.LENGTH_SHORT).show();
     }
 }

@@ -1,0 +1,12 @@
+<div class="box" id="listaDeFilmesCadastrados">
+	<h2> Filmes cadastrados</h2>
+	<ul>
+		{{#filmes}}
+		<li>
+			<img src="{{capaDoFilme}}">
+			<h3>{{nome}}</h3>
+			<p>{{sinopse}}</p>
+		</li> 
+		{{/filmes}}
+	</ul>
+</div>

@@ -14,13 +14,6 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
-    <com.tcc.apptcc.adapters.CustomAutoCompleteTextView
-        android:id="@+id/atv_places"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:hint="Insira o local aqui" />
-
     <com.rey.material.widget.FloatingActionButton
         android:id="@+id/btn_levar_para_adicionar_pessoas"
         android:layout_width="wrap_content"

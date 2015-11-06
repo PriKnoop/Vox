@@ -1,0 +1,139 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbarStyle="outsideOverlay"
+    tools:context=".PerfilPessoaProcuradaFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?colorPrimary"
+            android:orientation="vertical"
+            android:paddingBottom="16dp"
+            android:paddingLeft="72dp"
+            android:paddingRight="16dp"
+            android:paddingTop="16dp">
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nome Completo"
+                android:textCursorDrawable="@drawable/text_cursor_cyan"
+                android:textSize="26sp"
+                app:met_textColorHint="@android:color/white"
+                app:met_baseColor="@android:color/white"
+                app:met_floatingLabel="normal"
+                app:met_maxCharacters="50"
+                app:met_primaryColor="@android:color/white"
+                app:met_singleLineEllipsis="true"
+                android:id="@+id/et_perfil_nome" />
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:hint="Situação"
+                android:textCursorDrawable="@drawable/text_cursor_cyan"
+                app:met_textColorHint="@android:color/white"
+                app:met_baseColor="@android:color/white"
+                app:met_floatingLabel="normal"
+                app:met_primaryColor="@android:color/white"
+                android:id="@+id/et_perfil_tipo"
+                android:clickable="true"
+                android:linksClickable="true" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:weightSum="1">
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Gênero"
+                android:focusable="false"
+                android:id="@+id/et_perfil_genero"
+                app:met_floatingLabel="highlight"
+                android:layout_weight="0.61" />
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Data de nascimento"
+                android:focusable="false"
+                android:id="@+id/et_perfil_datanascimento"
+                app:met_floatingLabel="highlight"/>
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Etnia"
+                android:focusable="false"
+                android:id="@+id/et_perfil_etnia"
+                app:met_floatingLabel="highlight"/>
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Cor dos olhos"
+                android:focusable="false"
+                android:id="@+id/et_perfil_olhos"
+                app:met_floatingLabel="highlight"/>
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Cor do cabelo"
+                android:focusable="false"
+                android:id="@+id/et_perfil_cabelocor"
+                app:met_floatingLabel="highlight" />
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Tipo de cabelo"
+                android:focusable="false"
+                android:id="@+id/et_perfil_cabelotipo"
+                app:met_floatingLabel="highlight"/>
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Físico"
+                android:focusable="false"
+                android:id="@+id/et_perfil_tipofisico"
+                app:met_floatingLabel="highlight"/>
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Altura (em cm)"
+                android:focusable="false"
+                android:inputType="number"
+                android:id="@+id/et_perfil_altura"
+                app:met_floatingLabel="highlight" />
+
+            <com.rey.material.widget.FloatingActionButton
+                android:id="@+id/btn_adicionar_avistamento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/LightFABColor"
+                android:layout_gravity="right" />
+
+
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

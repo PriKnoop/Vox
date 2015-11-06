@@ -8,24 +8,12 @@
     <com.rengwuxian.materialedittext.MaterialEditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Descreva a situação"
+        android:hint="Descreva a situação do avistamento"
         android:textCursorDrawable="@drawable/text_cursor_cyan"
         app:met_maxCharacters="299"
         android:paddingTop="8dp"
         app:met_singleLineEllipsis="true"
         android:id="@+id/et_detalhes_avistamento"
-        app:met_floatingLabel="highlight"
-        et_dividerHeight="0dp"/>
-
-    <com.rengwuxian.materialedittext.MaterialEditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Onde a pessoa estava?"
-        android:textCursorDrawable="@drawable/text_cursor_cyan"
-        app:met_maxCharacters="199"
-        android:paddingTop="8dp"
-        app:met_singleLineEllipsis="true"
-        android:id="@+id/et_localizacao_avistamento"
         app:met_floatingLabel="highlight"
         et_dividerHeight="0dp"/>
 

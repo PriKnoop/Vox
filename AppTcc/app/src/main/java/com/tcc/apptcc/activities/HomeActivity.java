@@ -29,7 +29,7 @@ import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 import com.tcc.apptcc.adapters.SlidingTabLayout;
 import com.tcc.apptcc.adapters.ViewPagerAdapter;
 
-public class HomeActivity extends AppCompatActivity implements PessoasAdicionadasFragment.OnHeadlineSelectedListener, InicioFragment.OnFragmentInteractionListener, SearchFragment.OnFragmentInteractionListener, AdicionarPessoasFragment.OnFragmentInteractionListener {
+public class HomeActivity extends AppCompatActivity implements PessoasAdicionadasFragment.OnHeadlineSelectedListener, InicioFragment.OnFragmentInteractionListener, SearchFragment.OnFragmentInteractionListener, AdicionarPessoasFragment.OnFragmentInteractionListener, PerfilPessoaProcuradaFragment.OnFragmentInteractionListener  {
 
     // Declaring Your View and Variables
 

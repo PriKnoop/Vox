@@ -40,7 +40,7 @@ import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
  * Use the {@link InicioFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class InicioFragment extends Fragment {
+public class InicioFragment extends android.support.v4.app.Fragment {
     private MaterialListView mListView;
     private PessoaProcuradaDAO pessoaDAO;
     int contadorDeCards;
@@ -175,7 +175,7 @@ public class InicioFragment extends Fragment {
     }
 
    // private Card adicionarCardPessoa(final int position) {
-    private Card adicionarCardPessoa(PessoaProcurada pessoaProcurada) {
+    private Card adicionarCardPessoa(final PessoaProcurada pessoaProcurada) {
        // String title = "Pessoa " + (position + 1);
        // String description = "Desaparecido";
         String title = pessoaProcurada.getNome();
@@ -208,7 +208,7 @@ public class InicioFragment extends Fragment {
                         .setListener(new OnActionClickListener() {
                             @Override
                             public void onActionClicked(View view, Card card) {
-                                Toast.makeText(getContext(), "Ir para perfil", Toast.LENGTH_SHORT).show();
+                                replaceFragment(new PerfilPessoaProcuradaFragment().newInstance(pessoaProcurada));
                             }
                         }));
 

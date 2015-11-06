@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+		<title> Filmator</title>
+		{{> Adiciona_scripts }}
+		<link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap-theme.css">
+		<link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap-theme.min.css">
+		<link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="/css/style_PaginaInicial.css">
+	</head>
+	<body>
+		<div class="myheader">
+			<img src="../img/icon.png">
+			<h1>Filmator</h1>
+				<ul class="nav nav-pills menus">
+					<li role="presentation" class="active"><a href="/PaginaInicial">Home</a></li>
+					<li role="presentation"><a href="/avaliacao">Avalie os filmes</a></li>
+					<li role="presentation"><a href="/sair">Sair</a></li>
+				</ul>
+		</div>
+		<div class="biblioteca">
+			{{#filmes}}
+					<div id="Linha">
+						<div id="Quadrados">
+						<input id="nomePesquisa" name="nome" type="hidden" value="{{nome}}">
+						<button type="button" onClick="return abreFichaTecnica()"><img src="{{CapaDoFilme}}" width="210" height="320" border="2"></button>
+						</div> 
+					</div>
+			{{/filmes}}
+		</div>
+	</body>
+</html>

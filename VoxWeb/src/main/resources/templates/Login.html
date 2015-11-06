@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" type="text/css" href="/css/style_login.css">
+		<title>Filmator</title>
+  </head>
+  <body>
+	  <div class="loginbonito">
+		<div class="container">
+		<img src="../img/icon.png">
+		  <form action="/entrar" method="POST" name="form_identificacao">
+			<h2>Filmator</h2>
+			<input type="text" placeholder="Login" name="login" required autofocus>
+			<input type="password" placeholder="Senha" name="senha" required>
+			<button type="submit" onclick="validaFormidentificacao()">Entrar</button>
+			<p>
+			<a href="/registro">Não tem cadastro? Registre-se</a>
+		  </form>
+		</div> 
+	  </div>
+  </body>
+</html>

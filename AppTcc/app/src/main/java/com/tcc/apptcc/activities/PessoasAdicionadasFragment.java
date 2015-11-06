@@ -12,9 +12,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -45,15 +48,28 @@ import android.view.Menu;
 import android.widget.AutoCompleteTextView;
 import android.widget.SimpleAdapter;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.places.AutocompletePrediction;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceBuffer;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.rey.material.widget.FloatingActionButton;
 import com.tcc.apptcc.adapters.ListViewDemoAdapter;
 import com.tcc.apptcc.adapters.ListViewItem;
+import com.tcc.apptcc.adapters.PlaceAutocompleteAdapter;
 import com.tcc.apptcc.adapters.PlaceJSONParser;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PessoasAdicionadasFragment extends Fragment {
+import static com.google.android.gms.location.places.Places.*;
+
+public class PessoasAdicionadasFragment extends android.support.v4.app.Fragment {
     private List<ListViewItem> mItems;        // ListView items list
     private ListView lista;
     private static final String ARG_PARAM1 = "param1";
@@ -65,10 +81,6 @@ public class PessoasAdicionadasFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private FloatingActionButton btnIrParaAdicionarPessoas;
-
-    AutoCompleteTextView atvPlaces;
-    PlacesTask placesTask;
-    ParserTask parserTask;
 
     private OnFragmentInteractionListener mListener;
 
@@ -84,7 +96,6 @@ public class PessoasAdicionadasFragment extends Fragment {
     public PessoasAdicionadasFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -127,33 +138,8 @@ public class PessoasAdicionadasFragment extends Fragment {
             }
         });
 
-
-        atvPlaces = (AutoCompleteTextView) view.findViewById(R.id.atv_places);
-        atvPlaces.setThreshold(1);
-
-        atvPlaces.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                placesTask = new PlacesTask();
-                placesTask.execute(s.toString());
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count,
-                                          int after) {
-                // TODO Auto-generated method stub
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                // TODO Auto-generated method stub
-            }
-        });
-
         return view;
     }
-
 
     // Container Activity must implement this interface
     public interface OnHeadlineSelectedListener {
@@ -208,140 +194,10 @@ public class PessoasAdicionadasFragment extends Fragment {
 
     private void inicializaComponentes(View view) {
         btnIrParaAdicionarPessoas = (FloatingActionButton) view.findViewById(R.id.btn_levar_para_adicionar_pessoas);
+        // Retrieve the AutoCompleteTextView that will display Place suggestions.
         //lista = (ListView) view.findViewById(R.id.list);
 
-    }
+    }}
 
-    /** A method to download json data from url */
-    private String downloadUrl(String strUrl) throws IOException{
-        String data = "";
-        InputStream iStream = null;
-        HttpURLConnection urlConnection = null;
-        try{
-            URL url = new URL(strUrl);
-
-            // Creating an http connection to communicate with url
-            urlConnection = (HttpURLConnection) url.openConnection();
-
-            // Connecting to url
-            urlConnection.connect();
-
-            // Reading data from url
-            iStream = urlConnection.getInputStream();
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
-
-            StringBuffer sb = new StringBuffer();
-
-            String line = "";
-            while( ( line = br.readLine()) != null){
-                sb.append(line);
-            }
-
-            data = sb.toString();
-
-            br.close();
-
-        }catch(Exception e){
-            Log.d("Exception", e.toString());
-        }finally{
-            iStream.close();
-            urlConnection.disconnect();
-        }
-        return data;
-    }
-
-    // Fetches all places from GooglePlaces AutoComplete Web Service
-    private class PlacesTask extends AsyncTask<String, Void, String>{
-
-        @Override
-        protected String doInBackground(String... place) {
-            // For storing data from web service
-            String data = "";
-
-            // Obtain browser key from https://code.google.com/apis/console
-            String key = "key=AIzaSyBBYlmZrqOFxtnXF3Ay8O3-37_5XryUrqg";
-
-            String input="";
-
-            try {
-                input = "input=" + URLEncoder.encode(place[0], "utf-8");
-            } catch (UnsupportedEncodingException e1) {
-                e1.printStackTrace();
-            }
-
-            // place type to be searched
-            String types = "types=geocode";
-
-            // Sensor enabled
-            String sensor = "sensor=false";
-
-            // Building the parameters to the web service
-            String parameters = input+"&"+types+"&"+sensor+"&"+key;
-
-            // Output format
-            String output = "json";
-
-            // Building the url to the web service
-            String url = "https://maps.googleapis.com/maps/api/place/autocomplete/"+output+"?"+parameters;
-
-            try{
-                // Fetching the data from we service
-                data = downloadUrl(url);
-            }catch(Exception e){
-                Log.d("Background Task",e.toString());
-            }
-            return data;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-
-            // Creating ParserTask
-            parserTask = new ParserTask();
-
-            // Starting Parsing the JSON string returned by Web Service
-            parserTask.execute(result);
-        }
-    }
-    /** A class to parse the Google Places in JSON format */
-    private class ParserTask extends AsyncTask<String, Integer, List<HashMap<String,String>>>{
-
-        JSONObject jObject;
-
-        @Override
-        protected List<HashMap<String, String>> doInBackground(String... jsonData) {
-
-            List<HashMap<String, String>> places = null;
-
-            PlaceJSONParser placeJsonParser = new PlaceJSONParser();
-
-            try{
-                jObject = new JSONObject(jsonData[0]);
-
-                // Getting the parsed data as a List construct
-                places = placeJsonParser.parse(jObject);
-
-            }catch(Exception e){
-                Log.d("Exception",e.toString());
-            }
-            return places;
-        }
-
-        @Override
-        protected void onPostExecute(List<HashMap<String, String>> result) {
-
-            String[] from = new String[] { "description"};
-            int[] to = new int[] { android.R.id.text1 };
-
-            // Creating a SimpleAdapter for the AutoCompleteTextView
-            SimpleAdapter adapter = new SimpleAdapter(getContext(), result, android.R.layout.simple_list_item_1, from, to);
-
-            // Setting the adapter
-            atvPlaces.setAdapter(adapter);
-        }
-    }
-}
 
 

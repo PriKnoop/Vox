@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+		{{> Adiciona_scripts }}
+		<link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap-theme.css">
+		<link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap-theme.min.css">
+		<link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="/css/style.css">
+	</head>
+	<body>
+		<div class="myheader">
+			<img src="../img/icon.png">
+			<h1>Filmator</h1>
+			<ul class="nav nav-pills menus">
+					<li role="presentation" class="active"><a href="/sair">Sair</a></li>
+			</ul>
+		</div>
+		<div class="formCadastro box">
+			<h2> Cadastre um Filme</h2>
+			<form action="/inserir" method="post" name="form_cadastro">
+				<input name="nome" type="text" placeholder="Nome do Filme" maxlength="100" required><p>
+			 	<select name="genero" required>
+			 		 <option value="">Selecione o Gênero</option>
+            		<option value="{{name}}">{{descricao}}</option>
+				</select><p>
+				<input name="anoLancamento" type="text" placeholder="Ano de Lançamento" maxlength="4" required> <p>
+				<textarea name="sinopse" placeholder="Sinopse do Filme" maxlength="800" required></textarea> <p>
+				<input type="text" placeholder="URL da capa do filme" name="capaDoFilme" maxlength="200" required><p>
+				<input type="button" onClick="return validaFormulario()" value="Cadastrar">
+			</form>
+		</div>
+	
+		<div id="boxListaDeFilmes">
+		</div>
+		
+		<div class="box">
+			<input id="nomePesquisa" name="nome" type="text" placeholder="Digite o nome do filme desejado" maxlength="100" required><p>
+			<button type="button" onClick="return validaFormularioPesquisa()">Pesquisar Filme</button><p>
+		</div>
+		
+		<div class="box boxreajust">
+				<input name="nome" id="nomeFilmeExcluido" type="text" placeholder="Quer excluir qual filme?" maxlength="100" required><p>
+				<button type="button" onClick="return validaFormularioExclusao()">Excluir Filme</button><p>
+		</div>
+	</body>
+</html>
