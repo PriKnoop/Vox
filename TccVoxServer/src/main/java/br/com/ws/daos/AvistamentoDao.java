@@ -38,6 +38,7 @@ public class AvistamentoDao extends GenericDao<Long, Avistamento> {
 		}
 		return null;
 	}
+	
 
 	public List<Avistamento> pesquisarAvistamentoPorUsuario(Long idUsuario,
 			EntityManager em) {

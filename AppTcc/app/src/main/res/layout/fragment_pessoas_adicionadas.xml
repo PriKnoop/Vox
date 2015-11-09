@@ -1,16 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="@style/AppTheme">
+    style="@style/AppTheme"
+    tools:context=".AdicionarPessoasFragment">
+    >
 
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?colorPrimary"
+        android:orientation="vertical"
+        android:paddingBottom="16dp"
+        android:paddingLeft="72dp"
+        android:paddingRight="16dp"
+        android:paddingTop="16dp"
+        android:id="@+id/linearLayout"
+        android:weightSum="1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="AVISTAMENTOS RECENTES"
+            style="@style/Material_Card_View"
+            android:textColor="#fafafa"
+            android:textSize="20sp"
+            android:typeface="normal" />
+    </LinearLayout>
+
+
+    <com.dexafree.materialList.view.MaterialListView
+        android:id="@+id/listView_avistamentos_recentes"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/linearLayout" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Aba adicionar"
-        android:id="@+id/textView"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/tv_adicionadas"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 

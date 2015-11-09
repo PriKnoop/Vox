@@ -97,12 +97,12 @@ public class InicioFragment extends android.support.v4.app.Fragment {
         mListView.addOnItemTouchListener(new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(@NonNull Card card, int position) {
-                Log.d("CARD_TYPE", "" + card.getTag());
+                Toast.makeText(getContext(), "Clique normal " + card.getTag(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onItemLongClick(@NonNull Card card, int position) {
-                Log.d("LONG_CLICK", "" + card.getTag());
+                Toast.makeText(getContext(), "Clique longo " + card.getTag(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -168,7 +168,7 @@ public class InicioFragment extends android.support.v4.app.Fragment {
     }*/
     private void adicionarCards(List<PessoaProcurada> listaPessoas) {
         List<Card> cards = new ArrayList<>();
-        for (int i = 0; i < listaPessoas.size() - 1; i++) {
+        for (int i = 0; i < listaPessoas.size(); i++) {
             cards.add(adicionarCardPessoa(listaPessoas.get(i)));
         }
         mListView.getAdapter().addAll(cards);
@@ -231,25 +231,6 @@ public class InicioFragment extends android.support.v4.app.Fragment {
                 .build();
     }
 
-    private void addMockCardAtStart() {
-        mListView.getAdapter().addAtStart(new Card.Builder(getContext())
-                .setTag("BASIC_IMAGE_BUTTONS_CARD")
-                .setDismissible()
-                .withProvider(new CardProvider())
-                .setLayout(R.layout.material_basic_image_buttons_card_layout)
-                .setTitle("Hi there")
-                .setDescription("I've been added on top!")
-                .addAction(R.id.left_text_button, new TextViewAction(getContext())
-                        .setText("left")
-                        .setTextResourceColor(R.color.black_button))
-                .addAction(R.id.right_text_button, new TextViewAction(getContext())
-                        .setText("right")
-                        .setTextResourceColor(R.color.orange_button))
-                .setDrawable(R.drawable.profile)
-                .endConfig()
-                .build());
-    }
-
     private void replaceFragment(Fragment frag) {
         getFragmentManager().beginTransaction().replace(R.id.nav_drawer_container, frag, "TAG").commit();
     }
@@ -258,7 +239,6 @@ public class InicioFragment extends android.support.v4.app.Fragment {
         @Override
         protected List<PessoaProcurada> doInBackground(String... params) {
             Log.i("DEBUG", params[0]);
-            PessoaProcurada[] listaPessoasRetornadas;
             List<PessoaProcurada> lista = pessoaDAO.chamaMetodoPesquisarTodasPessoasCadastradas();
             return lista;
 
@@ -275,7 +255,7 @@ public class InicioFragment extends android.support.v4.app.Fragment {
         }
 
         protected void onPostExecute(List<PessoaProcurada> listaPessoas) {
-            if (listaPessoas.size() != 0) {
+            if (listaPessoas != null || !listaPessoas.isEmpty()) {
             Toast.makeText(getContext(), "Pessoas encontradas!!", Toast.LENGTH_LONG).show();
             adicionarCards(listaPessoas);
         } else {

@@ -126,6 +126,14 @@
                 android:id="@+id/et_perfil_altura"
                 app:met_floatingLabel="highlight" />
 
+            <it.gmariotti.cardslib.library.view.CardView
+                android:id="@+id/card_avistamentos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginTop="12dp"/>
+
             <com.rey.material.widget.FloatingActionButton
                 android:id="@+id/btn_adicionar_avistamento"
                 android:layout_width="wrap_content"

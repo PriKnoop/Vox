@@ -17,7 +17,7 @@ public class PessoaProcuradaDao extends GenericDao<Long, PessoaProcurada> {
 			String nomeCompleto, EntityManager em) {
 		try {
 			Query consulta = em
-					.createQuery("Select p from PessoaProcurada as p where p.nome like :nomeCompleto");
+					.createQuery("Select p from PessoaProcurada as p where p.nome like :nomeCompleto order by p.idPessoaProcurada desc");
 			consulta.setParameter("nomeCompleto", nomeCompleto);
 			@SuppressWarnings("unchecked")
 			List<PessoaProcurada> lista = consulta.getResultList();
@@ -38,7 +38,7 @@ public class PessoaProcuradaDao extends GenericDao<Long, PessoaProcurada> {
 			String qualquerParteDoNome, EntityManager em) {
 		try {
 			Query consulta = em
-					.createQuery("Select p from PessoaProcurada as p where p.nome like :qualquerParteDoNome");
+					.createQuery("Select p from PessoaProcurada as p where p.nome like :qualquerParteDoNome order by p.idPessoaProcurada desc");
 			consulta.setParameter("qualquerParteDoNome", "%"
 					+ qualquerParteDoNome + "%");
 			@SuppressWarnings("unchecked")
@@ -62,7 +62,7 @@ public class PessoaProcuradaDao extends GenericDao<Long, PessoaProcurada> {
 			Query consulta = em
 					.createQuery("Select p from PessoaProcurada as p where p.genero like :genero "
 							+ "and p.etnia like:etnia and p.olhos like:olhos and p.cabeloCor like:cabeloCor "
-							+ "and p.cabeloTipo like:cabeloTipo");
+							+ "and p.cabeloTipo like:cabeloTipo order by p.idPessoaProcurada desc");
 			consulta.setParameter("genero", pessoa.getGenero());
 			consulta.setParameter("etnia", pessoa.getEtnia());
 			consulta.setParameter("olhos", pessoa.getOlhos());
@@ -86,12 +86,18 @@ public class PessoaProcuradaDao extends GenericDao<Long, PessoaProcurada> {
 		return null;
 	}
 
-	public List<PessoaProcurada> procurarPessoaPorUsuario(Long idUsuario,
+	public List<PessoaProcurada> pesquisarPessoasPorUsuarioPorUltimoAvistamento(Long idUsuario,
 			EntityManager em) {
 		try {
 			Query consulta = em
-					.createQuery("Select p from PessoaProcurada as p where p.usuario.idUsuario = :idUsuario "
-							+ "order by p.idPessoaProcurada desc");
+					.createQuery("Select p from Avistamento a inner join a.pessoaProcurada as p "
+							+ "where p.idPessoaProcurada = a.pessoaProcurada.idPessoaProcurada and p.usuario.idUsuario = :idUsuario "
+							+ "order by a.idAvistamento desc");
+			
+			/*Query consulta = em
+			.createQuery("Select p from Circunstancia c inner join c.avistamento as a "
+					+ "inner join a.pessoaProcurada as p inner join c.localizacao as l "
+					+ "where l.uf like :estado order by l.idLocalizacao desc");*/
 			consulta.setParameter("idUsuario", idUsuario);
 
 			@SuppressWarnings("unchecked")
@@ -112,10 +118,7 @@ public class PessoaProcuradaDao extends GenericDao<Long, PessoaProcurada> {
 	public List<PessoaProcurada> pesquisarPessoaPorEstado(String estado,
 			EntityManager em) {
 		try {
-			/*Query consulta = em
-					.createQuery("Select p from Circunstancia c inner join c.avistamento as a "
-							+ "inner join a.pessoaProcurada as p inner join c.localizacao as l "
-							+ "where l.uf like :estado order by l.idLocalizacao desc");*/
+			
 			Query consulta = em
 					.createQuery("Select p from Localizacao as l inner join l.circunstancia as c "
 							+ "inner join c.avistamento as a "

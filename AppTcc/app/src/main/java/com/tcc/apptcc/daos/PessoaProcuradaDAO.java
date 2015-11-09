@@ -99,27 +99,61 @@ public class PessoaProcuradaDAO {
 
             ArrayList<PessoaProcurada> listaPessoasRetornadas = new ArrayList<PessoaProcurada>();
             Gson gson = new Gson();
+        JSONObject response = Json.get(URL);
 
-            //List<ResponseEntity<PessoaProcurada[]>> pessoasRetornadas = Arrays.asList(restTemplate.getForEntity(URL, PessoaProcurada[].class));
-            // List pessoasRetornadas = restTemplate.getForObject(URL, ArrayList.class);
-            // List<PessoaProcurada> mcList = Arrays.asList(pArray);
-            // List pessoasRetornadasList = Arrays.asList(restTemplate.getForObject(URL, PessoaProcurada[].class));
-
-
-            try {
-                JSONObject response = Json.get(URL);
-                JSONArray array = response.getJSONArray("pessoaProcurada");
-                for (int i = 0; i < array.length(); i++) {
-                    listaPessoasRetornadas.add(gson.fromJson(array.get(i).toString(), PessoaProcurada.class));
-
-                    // listaPessoasRetornadas.add(new PessoaProcurada().fromJSON(new JSONObject(array.get(i).toString())));
+        try {
+                if (response != null){
+                    JSONArray array = response.getJSONArray("pessoaProcurada");
+                    if (array == null){
+                        listaPessoasRetornadas.add(gson.fromJson(response.toString(), PessoaProcurada.class));
+                    } else {
+                        for (int i = 0; i < array.length(); i++) {
+                            listaPessoasRetornadas.add(gson.fromJson(array.get(i).toString(), PessoaProcurada.class));
+                        }
+                    }
+                } else {
+                    return null;
                 }
+
             } catch (JSONException e) {
+                listaPessoasRetornadas.add(gson.fromJson(response.toString(), PessoaProcurada.class));
                 e.printStackTrace();
             }
             return listaPessoasRetornadas;
+    }
 
+    public List<PessoaProcurada> chamaMetodoPesquisarPessoasPorUsuario(Long idUsuario) {
 
+        String URL = URL_PADRAO + "/pesquisarPorUsuario/" + idUsuario;
+
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+        restTemplate.setRequestFactory(
+                new HttpComponentsClientHttpRequestFactory());
+
+        ArrayList<PessoaProcurada> listaPessoasRetornadas = new ArrayList<PessoaProcurada>();
+        Gson gson = new Gson();
+        JSONObject response = Json.get(URL);
+
+        try {
+            if (response != null){
+                JSONArray array = response.getJSONArray("pessoaProcurada");
+                if (array == null){
+                    listaPessoasRetornadas.add(gson.fromJson(response.toString(), PessoaProcurada.class));
+                } else {
+                    for (int i = 0; i < array.length()-1; i++) {
+                        listaPessoasRetornadas.add(gson.fromJson(array.get(i).toString(), PessoaProcurada.class));
+                    }
+                }
+            } else {
+                return null;
+            }
+
+        } catch (JSONException e) {
+            listaPessoasRetornadas.add(gson.fromJson(response.toString(), PessoaProcurada.class));
+            e.printStackTrace();
+        }
+        return listaPessoasRetornadas;
     }
 }
 

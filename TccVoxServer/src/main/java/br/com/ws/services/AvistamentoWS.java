@@ -96,6 +96,34 @@ public class AvistamentoWS extends WSTemplate {
 		}
 		return null;
 	}
+	
+	@GET
+	@Path("/pesquisaUltimoAvistamentoPorPessoa/{idPessoaProcurada}")
+	@Produces(JSON.UTF8JSON)
+	public Avistamento pesquisarUltimoAvistamentoPorIdPessoaProcurada(
+			@PathParam("idPessoaProcurada") Long idPessoaProcurada) {
+		List<Avistamento> listaAvistamentosRetornados;
+		try {
+			listaAvistamentosRetornados = dao
+					.pesquisarAvistamentoPorIdPessoaProcurada(
+							idPessoaProcurada, manager);
+			if (listaAvistamentosRetornados != null) {
+				System.out.println("-----> Avistamento encontrado!");
+				return listaAvistamentosRetornados.get(0);
+			}
+			if (listaAvistamentosRetornados == null) {
+				System.out.println("-----> Avistamento não encontrado!");
+				return null;
+			}
+		} catch (Exception e) {
+			manager.getTransaction().rollback();
+			System.out
+					.println("Erro no pesquisarAvistamentoPorId, avistamentoWS");
+			System.out.println("-----> Avistamento não encontrado!");
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	@GET
 	@Path("/pesquisaPorUsuario/{idUsuario}")

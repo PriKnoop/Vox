@@ -10,7 +10,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
-
 import br.com.ws.configs.JSON;
 import br.com.ws.daos.PessoaProcuradaDao;
 import br.com.ws.managers.WSTemplate;
@@ -167,8 +166,9 @@ public class PessoaProcuradaWS extends WSTemplate {
 			@PathParam("idUsuario") Long idUsuario) {
 		List<PessoaProcurada> listaPessoasRetornadas;
 		try {
-			listaPessoasRetornadas = dao.procurarPessoaPorUsuario(idUsuario,
-					manager);
+			listaPessoasRetornadas = dao
+					.pesquisarPessoasPorUsuarioPorUltimoAvistamento(idUsuario,
+							manager);
 			if (listaPessoasRetornadas != null) {
 				System.out.println("-----> Pessoas encontradas!");
 				return listaPessoasRetornadas;
@@ -219,7 +219,8 @@ public class PessoaProcuradaWS extends WSTemplate {
 			@PathParam("cidade") String cidade) {
 		List<PessoaProcurada> listaPessoasRetornadas;
 		try {
-			listaPessoasRetornadas = dao.pesquisarPessoaPorCidade(cidade, manager);
+			listaPessoasRetornadas = dao.pesquisarPessoaPorCidade(cidade,
+					manager);
 			if (listaPessoasRetornadas != null) {
 				System.out.println("-----> Pessoas encontradas!");
 				return listaPessoasRetornadas;
@@ -236,14 +237,15 @@ public class PessoaProcuradaWS extends WSTemplate {
 		}
 		return null;
 	}
-	
+
 	@GET
 	@Path("/pesquisarTodos")
 	@Produces(JSON.UTF8JSON)
 	public List<PessoaProcurada> pesquisarTodos() {
 		List<PessoaProcurada> listaPessoasRetornadas;
 		try {
-			listaPessoasRetornadas = dao.pesquisarTodasPessoasCadastradas(manager);
+			listaPessoasRetornadas = dao
+					.pesquisarTodasPessoasCadastradas(manager);
 			if (listaPessoasRetornadas != null) {
 				System.out.println("-----> Pessoas encontradas!");
 				return listaPessoasRetornadas;

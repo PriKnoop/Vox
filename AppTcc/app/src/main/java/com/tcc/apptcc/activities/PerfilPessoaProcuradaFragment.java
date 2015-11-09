@@ -19,6 +19,8 @@ import com.tcc.apptcc.daos.LocalizacaoDAO;
 import com.tcc.apptcc.daos.PessoaProcuradaDAO;
 import com.tcc.apptcc.pojos.PessoaProcurada;
 
+import it.gmariotti.cardslib.library.view.CardView;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -29,7 +31,7 @@ import com.tcc.apptcc.pojos.PessoaProcurada;
  */
 public class PerfilPessoaProcuradaFragment extends android.support.v4.app.Fragment {
 
-    View viewCustom;
+    View viewCustom, viewCard, view;
     private static PessoaProcurada pessoaSelecionada;
     private OnFragmentInteractionListener mListener;
 
@@ -67,7 +69,7 @@ public class PerfilPessoaProcuradaFragment extends android.support.v4.app.Fragme
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_perfil_pessoa_procurada, container, false);
+        view = inflater.inflate(R.layout.fragment_perfil_pessoa_procurada, container, false);
         viewCustom = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_avistamento, container, false);
 
         inicializaComponentes(view);
@@ -76,12 +78,31 @@ public class PerfilPessoaProcuradaFragment extends android.support.v4.app.Fragme
         etCabeloTipo.setText(pessoaSelecionada.getCabeloTipo().toString());
         etDataNascimento.setText(pessoaSelecionada.getDataNascimento().toString());
         etEtnia.setText(pessoaSelecionada.getEtnia().toString());
-        etFisico.setText(pessoaSelecionada.getTipoFisico().toString());
         etOlhos.setText(pessoaSelecionada.getOlhos().toString());
+        etFisico.setText(pessoaSelecionada.getTipoFisico().toString());
         etPessoaGenero.setText(pessoaSelecionada.getGenero().toString());
         etPessoaNome.setText(pessoaSelecionada.getNome().toString());
         etPessoaTipo.setText(pessoaSelecionada.getTipoPessoaProcurada().toString());
+
+        construirCard();
+
+
         return view;
+    }
+
+    private void construirCard() {
+
+        AvistamentosCard card;
+
+
+        //Create a Card
+        card= new AvistamentosCard(getActivity());
+        card.init();
+
+        //Set card in the cardView
+        CardView cardView = (CardView) view.findViewById(R.id.card_avistamentos);
+        cardView.setCard(card);
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event

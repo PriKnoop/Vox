@@ -5,8 +5,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.tcc.apptcc.activities.InicioFragment;
+import com.tcc.apptcc.activities.PesquisaFragment;
 import com.tcc.apptcc.activities.PessoasAdicionadasFragment;
-import com.tcc.apptcc.activities.SearchFragment;
 
 /**
  * Created by Pri on 23/09/2015.
@@ -41,8 +41,8 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         }
         else             // As we are having 2 tabs if the position is now 0 it must be 1 so we are returning second tab
         {
-            SearchFragment searchFragment = new SearchFragment();
-            return searchFragment;
+            PesquisaFragment pesquisaFragment = new PesquisaFragment();
+            return pesquisaFragment;
         }
 
 

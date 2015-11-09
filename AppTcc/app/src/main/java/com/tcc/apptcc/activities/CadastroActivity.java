@@ -189,7 +189,7 @@ public class CadastroActivity extends AppCompatActivity {
                 editor.putLong("id", usuario.getIdUsuario());
                 editor.commit();
 
-                Toast.makeText(CadastroActivity.this, "UsuÃ¡rio cadastrado!", Toast.LENGTH_LONG).show();
+                Toast.makeText(CadastroActivity.this, "Usuario cadastrado!", Toast.LENGTH_LONG).show();
                 Bundle parametros = new Bundle();
 
                 parametros.putSerializable("usuario", usuario);

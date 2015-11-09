@@ -5,9 +5,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -26,21 +24,22 @@ import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.mikepenz.materialdrawer.model.interfaces.Nameable;
-import com.tcc.apptcc.adapters.SlidingTabLayout;
-import com.tcc.apptcc.adapters.ViewPagerAdapter;
+import com.tcc.apptcc.pojos.Usuario;
 
-public class HomeActivity extends AppCompatActivity implements PessoasAdicionadasFragment.OnHeadlineSelectedListener, InicioFragment.OnFragmentInteractionListener, SearchFragment.OnFragmentInteractionListener, AdicionarPessoasFragment.OnFragmentInteractionListener, PerfilPessoaProcuradaFragment.OnFragmentInteractionListener  {
+public class HomeActivity extends AppCompatActivity implements PessoasAdicionadasFragment.OnHeadlineSelectedListener, InicioFragment.OnFragmentInteractionListener, PesquisaFragment.OnFragmentInteractionListener, AdicionarPessoasFragment.OnFragmentInteractionListener, PerfilPessoaProcuradaFragment.OnFragmentInteractionListener  {
 
     // Declaring Your View and Variables
 
     private Drawer navegationDrawerLeft;
     private AccountHeader headerNavegationLeft;
     Toolbar toolbar;
+    Usuario usuarioLogado;
     public final static String NOME_PREFERENCIA = "preferencias_usuario";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
+        //usuarioLogado = (Usuario) getIntent().getExtras().getSerializable("usuario");
         setContentView(R.layout.activity_home);// Creating The Toolbar and setting it as the Toolbar for the activity
 
         if (!verificaSeUsuarioJaLogou()) {
@@ -132,7 +131,7 @@ public class HomeActivity extends AppCompatActivity implements PessoasAdicionada
                         //diminue o tamanho do header, mostra compactado - > .withCompactStyle(true)
                 .withHeaderBackground(R.color.ColorPrimaryDark)
                 .addProfiles(
-                        new ProfileDrawerItem().withName("Priscila Knoop").withEmail("priscilaknoop@outlook.com").withIcon(R.drawable.profile)
+                        new ProfileDrawerItem().withName("").withEmail("").withIcon(R.drawable.profile)
                 )
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
@@ -153,10 +152,9 @@ public class HomeActivity extends AppCompatActivity implements PessoasAdicionada
         //ADICIONANDO ITENS A NAVEGATION DRAWER
         // criar icones com cor diferenciada para quando estiver selecionada ex.: account_selected
         navegationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Inicio").withIcon(R.drawable.ic_home_black_24dp).withIdentifier(1));
-        navegationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Minha conta").withIcon(R.drawable.ic_account_circle_black_24dp).withIdentifier(2));
         //navegationDrawerLeft.addItem(new DividerDrawerItem());
         navegationDrawerLeft.addItem(new SectionDrawerItem().withName("Ações"));
-        navegationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Adicionar pessoas").withIcon(R.drawable.ic_add_circle_black_24dp).withIdentifier(3));
+        navegationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Minhas pessoas + novas").withIcon(R.drawable.ic_account_circle_black_24dp).withIdentifier(3));
         navegationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Pesquisar").withIcon(R.drawable.ic_search_black_24dp).withIdentifier(4));
        // navegationDrawerLeft.addItem(new DividerDrawerItem());
         navegationDrawerLeft.addItem(new SectionDrawerItem().withName("Informações"));
